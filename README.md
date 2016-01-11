@@ -18,7 +18,7 @@ define required env params in `.env.sh`
 
 start
 
-    $ source .env.sh && bin/hubot
+    $ bin/hubot
 
 ### environment parameters
 
