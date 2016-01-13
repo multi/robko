@@ -17,7 +17,7 @@
 #   ajacksified, multi
 
 jsdom = require 'jsdom'
-some     = require 'lodash/some'
+some  = require 'lodash/some'
 
 module.exports = (robot) ->
 
@@ -29,7 +29,7 @@ module.exports = (robot) ->
     url = msg.match[1]
 
     username = msg.message.user.name
-    if some(ignoredusers, (user) -> user === username)
+    if some(ignoredusers, (user) -> user == username)
       console.log 'ignoring user due to blacklist:', username
       return
 
