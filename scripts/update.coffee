@@ -13,7 +13,7 @@
 #   hubot pending update - Informs if there are pending updates (hubot needs a restart)
 #
 # Author:
-#   benjamine
+#   benjamine, multi
 
 child_process = require 'child_process'
 downloaded_updates = false

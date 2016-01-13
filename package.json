@@ -32,6 +32,7 @@
     "hubot-tell": "^1.2.4",
     "hubot-watcher": "^0.1.0",
     "jsdom": "^7.2.2",
+    "lodash": "^4.0.0",
     "nodemon": "^1.8.1",
     "soupselect": "^0.2.0"
   }
