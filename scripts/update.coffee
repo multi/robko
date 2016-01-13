@@ -44,7 +44,7 @@ module.exports = (robot) ->
             msg.send "my source code is up-to-date"
         try
           msg.send "npm update..."
-          child_process.exec 'npm update --no-optional', (error, stdout, stderr) ->
+          child_process.exec 'npm update', (error, stdout, stderr) ->
             if error
               msg.send "npm update failed: " + stderr
             else
