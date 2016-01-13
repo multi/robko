@@ -3,6 +3,10 @@
   "description": "Camplight chat bot built on the Hubot framework",
   "version": "0.0.2",
   "author": "multi",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/multi/robko.git"
+  },
   "license": "ISC",
   "dependencies": {
     "cleverbot-node": "^0.2.1",

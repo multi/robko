@@ -18,7 +18,17 @@ var package = require('../package')
 module.exports = function (robot) {
 
   robot.respond(/print version/i, function (msg) {
-    msg.send('version ' + package.version + ' (powered by Hubot ' + robot.version + ')')
+    msg.send(
+      [
+        'running version ',
+        package.version,
+        ' (powered by Hubot ',
+        robot.version,
+        ') [',
+        package.repository.url,
+        ']'
+      ].join('')
+    )
   })
 
 }
