@@ -20,9 +20,7 @@ module.exports = function (robot) {
   robot.respond(/process exit/i, function (msg) {
     msg.send('OK. Bye bye ...')
     exec('(sleep 5 && touch .touch-to-restart) &')
-    setTimeout(function () {
-      process.exit(0)
-    }, 100)
+    process.exit(0)
   })
 
 }
