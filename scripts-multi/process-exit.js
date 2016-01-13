@@ -1,5 +1,5 @@
 // Description:
-//   kill hubot process
+//   exit hubot process
 //
 // Dependencies:
 //   None
@@ -8,7 +8,7 @@
 //   None
 //
 // Commands:
-//   hubot die - kills hubot
+//   hubot process exit - process.exit(0) hubot
 //
 // Author:
 //   multi
@@ -19,7 +19,7 @@ var touch = exec.bind(this, 'sleep 1 && touch package.json')
 
 module.exports = function (robot) {
 
-  robot.respond(/die/i, function (msg) {
+  robot.respond(/process exit/i, function (msg) {
     msg.send('OK. Bye bye ...')
     setTimeout(function () {
       touch()
@@ -28,8 +28,11 @@ module.exports = function (robot) {
   })
 
   process.on('uncaughtException', function (err) {
-    console.log(err)
-    process.exit(1)
+    console.log('uncaughtException', err, err.stack)
+    setTimeout(function () {
+      touch()
+      process.exit(1)
+    }, 1000)
   })
 
 }
