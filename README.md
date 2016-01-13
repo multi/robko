@@ -18,7 +18,7 @@ define required env params in `.env.sh`
 
 start
 
-    $ node_modules/.bin/nodemon -x bin/hubot -r scripts-multi [-r scripts-{github-handle} -r ...]
+    $ node_modules/.bin/nodemon -w .touch-to-restart -x bin/hubot -r scripts-multi [-r scripts-{github-handle} -r ...]
 
 ### environment parameters
 
