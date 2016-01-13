@@ -2,7 +2,7 @@
 //   exit hubot process
 //
 // Dependencies:
-//   None
+//   hubot-auth
 //
 // Configuration:
 //   None
@@ -24,7 +24,7 @@ var restart = function (msg) {
   msg.send('process will exit & restart in 5 seconds...')
   setTimeout(function () {
     restarting = false
-    exec('(sleep 5 && touch .touch-to-restart) &')
+    exec('(sleep 1 && touch .touch-to-restart) &')
     process.exit(0)
   }, 5000)
 }
@@ -32,6 +32,11 @@ var restart = function (msg) {
 module.exports = function (robot) {
 
   robot.respond(/process exit\s?(.*)/i, function (msg) {
+    if (!robot.auth.isAdmin(msg.message.user)) {
+      msg.send('sorry, only admins can do that.')
+      return
+    }
+
     var force = !!msg.match[1] && msg.match[1].toLowerCase() === 'force'
     if (robot.events.listenerCount('env:test')) {
       robot.emit('env:test', function(err) {

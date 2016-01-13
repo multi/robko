@@ -2,7 +2,7 @@
 //   manage environment file
 //
 // Dependencies:
-//   None
+//   hubot-auth
 //
 // Configuration:
 //   ENV_FILE - environment variables source
@@ -28,6 +28,11 @@ var testEnv = function (cb) {
 module.exports = function (robot) {
 
   robot.respond(/env test/i, function (msg) {
+    if (!robot.auth.isAdmin(msg.message.user)) {
+      msg.send('sorry, only admins can do that.')
+      return
+    }
+
     testEnv(function (err, stdout, stderr) {
       if (err) {
         msg.send('stderr: ' + stderr + ' err: ' + err)
@@ -41,6 +46,11 @@ module.exports = function (robot) {
   robot.on('env:test', testEnv)
 
   robot.respond(/env list/i, function (msg) {
+    if (!robot.auth.isAdmin(msg.message.user)) {
+      msg.send('sorry, only admins can do that.')
+      return
+    }
+
     exec('grep -vE "^#|^$" ' + envFile, function (err, stdout, stderr) {
       if (err) {
         msg.send('stderr: ' + stderr + ' err: ' + err)
@@ -54,6 +64,11 @@ module.exports = function (robot) {
   robot.respond(/env add (.*)=(.*)/i, function (msg) {
     if (msg.match.length < 3) return
     if (msg.match[1].indexOf('export') !== 0) return
+
+    if (!robot.auth.isAdmin(msg.message.user)) {
+      msg.send('sorry, only admins can do that.')
+      return
+    }
 
     var toAdd = msg.match[1].replace('"', '\\"') + '=' + msg.match[2].replace('"', '\\"')
 
@@ -70,6 +85,11 @@ module.exports = function (robot) {
   robot.respond(/env del (.*)=(.*)/i, function (msg) {
     if (msg.match.length < 3) return
     if (msg.match[1].indexOf('export') !== 0) return
+
+    if (!robot.auth.isAdmin(msg.message.user)) {
+      msg.send('sorry, only admins can do that.')
+      return
+    }
 
     var toDel = msg.match[1].replace('"', '\\"') + '=' + msg.match[2].replace('"', '\\"')
 
