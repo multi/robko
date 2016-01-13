@@ -8,7 +8,7 @@
 //   None
 //
 // Commands:
-//   hubot print version - print package.json#version
+//   hubot version - prints package.json#version
 //
 // Author:
 //   multi
@@ -17,7 +17,7 @@ var package = require('../package')
 
 module.exports = function (robot) {
 
-  robot.respond(/print version/i, function (msg) {
+  robot.respond(/version/i, function (msg) {
     msg.send(
       [
         'running version ',

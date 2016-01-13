@@ -1,5 +1,6 @@
 [
   "hubot-redis-brain",
+  "hubot-auth",
   "hubot-help",
   "hubot-hackernews",
   "hubot-pomodoro",

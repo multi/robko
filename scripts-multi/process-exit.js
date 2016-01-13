@@ -15,11 +15,16 @@
 
 var exec = require('child_process').exec
 
+var restarting = false
+
 module.exports = function (robot) {
 
   robot.respond(/process exit/i, function (msg) {
-    msg.send('process will exit in ~5 seconds and restart in ~5 seconds')
+    if (restarting) return
+    restarting = true
+    msg.send('process will exit and restart in 5 seconds...')
     setTimeout(function () {
+      restarting = false
       exec('(sleep 5 && touch .touch-to-restart) &')
       process.exit(0)
     }, 5000)

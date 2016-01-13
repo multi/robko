@@ -24,6 +24,7 @@ start
 
 #### required
 
+    HUBOT_AUTH_ADMIN
     HUBOT_TEAM_ADMIN
 
 #### available
