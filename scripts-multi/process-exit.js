@@ -19,10 +19,15 @@ module.exports = function (robot) {
 
   robot.respond(/process exit/i, function (msg) {
     msg.send('OK. Bye bye ...')
-    exec('sleep 2 && touch package.json')
+    exec('sleep 5 && touch package.json')
     setTimeout(function () {
       process.exit(0)
     }, 100)
+  })
+
+  process.on('uncaughtException', function (err) {
+    console.log('uncaughtException', err, err.stack)
+    process.exit(1)
   })
 
 }

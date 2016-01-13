@@ -18,7 +18,7 @@ define required env params in `.env.sh`
 
 start
 
-    $ bin/hubot
+    $ node_modules/.bin/nodemon -x bin/hubot -r scripts-multi [-r scripts-{github-handle} -r ...]
 
 ### environment parameters
 
