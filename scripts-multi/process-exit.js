@@ -9,6 +9,7 @@
 //
 // Commands:
 //   hubot process exit - process.exit(0) hubot
+//   hubot process exit force - process.exit(0) hubot (no matter errors)
 //
 // Author:
 //   multi
@@ -30,12 +31,13 @@ var restart = function (msg) {
 
 module.exports = function (robot) {
 
-  robot.respond(/process exit/i, function (msg) {
+  robot.respond(/process exit\s?(.*)/i, function (msg) {
+    var force = !!msg.match[1] && msg.match[1].toLowerCase() === 'force'
     if (robot.events.listenerCount('env:test')) {
       robot.emit('env:test', function(err) {
         if (err) {
           msg.send('environment file has errors. you better fix them! (hint: @robko env test)')
-          return
+          if (!force) return
         }
 
         restart(msg)
