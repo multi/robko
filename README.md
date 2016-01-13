@@ -11,7 +11,6 @@ robko is a Camplight chat bot built on the [Hubot][hubot] framework.
 ### running
 
     $ npm i --no-optional
-    $ touch .touch-to-restart
 
 define required env params in `.env.sh`
 
