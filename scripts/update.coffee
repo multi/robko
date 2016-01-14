@@ -28,7 +28,7 @@ module.exports = (robot) ->
     if downloaded_updates
       updatesAvailable msg
     else
-      msg.send "I'm up-to-date!"
+      msg.send "all dependencies are up-to-date"
 
   robot.respond /git pull$/, (msg) ->
     try
@@ -39,8 +39,8 @@ module.exports = (robot) ->
         else
           output = stdout + ''
           if not /Already up\-to\-date/.test output
-            output = "my source code changed:\n" + output + "\ndon\'t forget to run npm install ;)"
-            msg.send output
+            msg.send "my source code changed:\n" + output
+            msg.send "don\'t forget to run npm install ;)"
           else
             msg.send "my source code is up-to-date"
     catch error
