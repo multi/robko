@@ -1,6 +1,6 @@
 # Description:
 #   Allows hubot to update itself using git pull and npm install.
-#   If updates are downloaded you'll need to restart hubot, for example using "hubot die" (restart using a watcher like forever.js).
+#   If updates are downloaded you'll need to restart hubot, for example using "hubot process exit" (restart using a watcher like nodemon).
 #
 # Dependencies:
 #   None
@@ -9,7 +9,8 @@
 #   None
 #
 # Commands:
-#   hubot update - Performs a git pull and npm install.
+#   hubot git pull - Performs a `git pull`
+#   hubot npm install - Performs a `npm i --production --no-optional`
 #   hubot pending update - Informs if there are pending updates (hubot needs a restart)
 #
 # Author:
@@ -18,51 +19,47 @@
 child_process = require 'child_process'
 downloaded_updates = false
 
-hint = "KILL ME PLEASE! (hint: @robko process exit)"
+updatesAvailable = (msg) ->
+  msg.send "I have some pending updates, KILL ME PLEASE! (hint: @robko process exit)"
 
 module.exports = (robot) ->
 
-  robot.respond /pending updates?\??$/i, (msg) ->
+  robot.respond /pending updates?\??$/, (msg) ->
     if downloaded_updates
-      msg.send "I have some pending updates, " + hint
+      updatesAvailable msg
     else
       msg.send "I'm up-to-date!"
 
-  robot.respond /update( yourself)?$/i, (msg) ->
-    changes = false
+  robot.respond /git pull$/, (msg) ->
     try
       msg.send "git pull..."
       child_process.exec 'git pull', (error, stdout, stderr) ->
         if error
           msg.send "git pull failed: " + stderr
         else
-          output = stdout+''
+          output = stdout + ''
           if not /Already up\-to\-date/.test output
-            msg.send "my source code changed:\n" + output
-            changes = true
+            output = "my source code changed:\n" + output + "\ndon\'t forget to run npm install ;)"
+            msg.send output
           else
             msg.send "my source code is up-to-date"
-        try
-          msg.send "npm install..."
-          child_process.exec 'npm i --no-optional', (error, stdout, stderr) ->
-            if error
-              msg.send "npm install failed: " + stderr
-            else
-              output = stdout+''
-              if /node_modules/.test output
-                msg.send "some dependencies updated:\n" + output
-                changes = true
-              else
-                msg.send "all dependencies are up-to-date"
-            if changes
-              downloaded_updates = true
-              msg.send "I downloaded some updates, " + hint
-            else
-              if downloaded_updates
-                msg.send "I have some pending updates, " + hint
-              else
-                msg.send "I'm up-to-date!"
-        catch error
-            msg.send "npm install failed: " + error
     catch error
         msg.send "git pull failed: " + error
+
+  robot.respond /npm install$/, (msg) ->
+    try
+      msg.send "npm install..."
+      child_process.exec 'npm i --production --no-optional', (error, stdout, stderr) ->
+        if error
+          msg.send "npm install failed: " + stderr
+        else
+          output = stdout + ''
+          if /node_modules/.test output
+            msg.send "some dependencies updated:\n" + output
+            updatesAvailable msg
+            downloaded_updates = true
+          else
+            msg.send "all dependencies are up-to-date"
+    catch error
+        msg.send "npm install failed: " + error
+
