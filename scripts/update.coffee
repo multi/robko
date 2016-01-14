@@ -1,5 +1,5 @@
 # Description:
-#   Allows hubot to update itself using git pull and npm update.
+#   Allows hubot to update itself using git pull and npm install.
 #   If updates are downloaded you'll need to restart hubot, for example using "hubot die" (restart using a watcher like forever.js).
 #
 # Dependencies:
@@ -9,7 +9,7 @@
 #   None
 #
 # Commands:
-#   hubot update - Performs a git pull and npm udate.
+#   hubot update - Performs a git pull and npm install.
 #   hubot pending update - Informs if there are pending updates (hubot needs a restart)
 #
 # Author:
@@ -43,10 +43,10 @@ module.exports = (robot) ->
           else
             msg.send "my source code is up-to-date"
         try
-          msg.send "npm update..."
-          child_process.exec 'npm update', (error, stdout, stderr) ->
+          msg.send "npm install..."
+          child_process.exec 'npm i --no-optional', (error, stdout, stderr) ->
             if error
-              msg.send "npm update failed: " + stderr
+              msg.send "npm install failed: " + stderr
             else
               output = stdout+''
               if /node_modules/.test output
@@ -63,6 +63,6 @@ module.exports = (robot) ->
               else
                 msg.send "I'm up-to-date!"
         catch error
-            msg.send "npm update failed: " + error
+            msg.send "npm install failed: " + error
     catch error
         msg.send "git pull failed: " + error
