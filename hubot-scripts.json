@@ -15,7 +15,6 @@
   "history.coffee",
   "ip.coffee",
   "news.coffee",
-  "quote.coffee",
   "tasks.coffee",
   "uptime.coffee",
   "url.coffee",
