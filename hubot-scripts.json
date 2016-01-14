@@ -1,7 +1,10 @@
 [
+  "9gag.coffee",
+  "animal.coffee",
   "base64.coffee",
   "birthday.coffee",
   "cash.coffee",
+  "catfacts.coffee",
   "chuck-norris.coffee",
   "cleverbot.coffee",
   "dilbert.coffee",
@@ -23,5 +26,9 @@
   "wits.coffee",
   "working-on.coffee",
   "xkcd.coffee",
-  "yoda-quotes.coffee"
+  "yoda-quotes.coffee",
+  "pin.coffee",
+  "stranger.coffee",
+  "octocat.coffee",
+  "jokels.coffee"
 ]
