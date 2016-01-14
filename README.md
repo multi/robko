@@ -43,8 +43,6 @@ start
 
     HUBOT_HISTORY_LINES=10
 
-    HUBOT_QUOTE_MAX_LINES=4
-
     HUBOT_TELL_ALIASES - Comma-separated string of command aliases for "tell".
     HUBOT_TELL_RELATIVE_TIME - Set to use relative time strings ("2 hours ago")
 
