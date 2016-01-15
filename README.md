@@ -52,3 +52,5 @@ start
     HUBOT_GOOGLE_IMAGES_HEAR - Optional. If set, bot will respond to any line that begins with "image me" or "animate me" without needing to address the bot directly
     HUBOT_GOOGLE_SAFE_SEARCH - Optional. Search safety level.
     HUBOT_GOOGLE_IMAGES_FALLBACK - The URL to use when API fails. `{q}` will be replaced with the query string.
+
+    HUBOT_GITHUB_WEBHOOK_SECRET

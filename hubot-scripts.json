@@ -10,7 +10,6 @@
   "facepalm.coffee",
   "fortune.coffee",
   "github-credentials.coffee",
-  "github-pull-request-notifier.coffee",
   "github-status.coffee",
   "history.coffee",
   "ip.coffee",
@@ -26,5 +25,6 @@
   "xkcd.coffee",
   "yoda-quotes.coffee",
   "octocat.coffee",
-  "jokels.coffee"
+  "jokels.coffee",
+  "room-info.coffee"
 ]
