@@ -10,8 +10,8 @@
 // Commands:
 //   hubot env test - test for syntax errors
 //   hubot env list - prints defined
-//   hubot env add (.*)=(.*) - add (eg. hubot env add TEST=test)
-//   hubot env del (.*)=(.*) - remove (eg. hubot env del TEST=test)
+//   hubot env add export KEY=value - add (eg. hubot env add KEY=value)
+//   hubot env del export KEY=value - remove (eg. hubot env del KEY=value)
 //
 // Author:
 //   multi
@@ -61,16 +61,15 @@ module.exports = function (robot) {
     })
   })
 
-  robot.respond(/env add (.*)=(.*)/i, function (msg) {
-    if (msg.match.length < 3) return
-    if (msg.match[1].indexOf('export') !== 0) return
+  robot.respond(/env add export (.*)=(.*)/i, function (msg) {
+    if (!msg.match[1] || !msg.match[2]) return
 
     if (!robot.auth.isAdmin(msg.message.user)) {
       msg.send('sorry, only admins can do that.')
       return
     }
 
-    var toAdd = msg.match[1].replace('"', '\\"') + '=' + msg.match[2].replace('"', '\\"')
+    var toAdd = 'export ' + msg.match[1].replace('"', '\\"') + '=' + msg.match[2].replace('"', '\\"')
 
     exec('echo "' + toAdd + '" >> ' + envFile, function (err, stdout, stderr) {
       if (err) {
@@ -82,16 +81,15 @@ module.exports = function (robot) {
     })
   })
 
-  robot.respond(/env del (.*)=(.*)/i, function (msg) {
-    if (msg.match.length < 3) return
-    if (msg.match[1].indexOf('export') !== 0) return
+  robot.respond(/env del export (.*)=(.*)/i, function (msg) {
+    if (!msg.match[1] || !msg.match[2]) return
 
     if (!robot.auth.isAdmin(msg.message.user)) {
       msg.send('sorry, only admins can do that.')
       return
     }
 
-    var toDel = msg.match[1].replace('"', '\\"') + '=' + msg.match[2].replace('"', '\\"')
+    var toDel = 'export ' + msg.match[1].replace('"', '\\"') + '=' + msg.match[2].replace('"', '\\"')
 
     exec('grep -v "' + toDel + '" ' + envFile + ' > ' + envFile + '.tmp && mv ' + envFile + '.tmp ' + envFile, function (err, stdout, stderr) {
       if (err) {

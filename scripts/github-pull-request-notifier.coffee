@@ -46,6 +46,8 @@ githubMiddleware = (() ->
 
 module.exports = (robot) ->
   robot.router.post "/hubot/gh-pull-requests", githubMiddleware, (req, res) ->
+    query = querystring.parse(url.parse(req.url).query)
+
     data = req.body
     room = query.room
 
