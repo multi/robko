@@ -9,47 +9,37 @@
 //
 // Commands:
 //   hubot process exit - process.exit(0) hubot
-//   hubot process exit force - process.exit(0) hubot (no matter errors)
 //
 // Author:
 //   multi
 
 var exec = require('child_process').exec
 
-var restarting = false
-
-var restart = function (msg) {
-  if (restarting) return
-  restarting = true
-  msg.send('process will exit & restart in 5 seconds...')
-  setTimeout(function () {
-    restarting = false
-    exec('(sleep 1 && touch .touch-to-restart) &')
-    process.exit(0)
-  }, 5000)
+var restart = function () {
+  exec('(sleep 2 && touch .touch-to-restart) &')
+  process.exit(0)
 }
 
 module.exports = function (robot) {
 
-  robot.respond(/process exit\s?(.*)/i, function (msg) {
+  robot.respond(/process exit/i, function (msg) {
     if (!robot.auth.isAdmin(msg.message.user)) {
       msg.send('sorry, only admins can do that.')
       return
     }
 
-    var force = !!msg.match[1] && msg.match[1].toLowerCase() === 'force'
     if (robot.events.listenerCount('env:test')) {
       robot.emit('env:test', function(err) {
         if (err) {
-          msg.send('environment file has errors. you better fix them! (hint: @robko env test)')
-          if (!force) return
+          msg.send('environment file has errors. you better fix them! (hint: @robko env list)')
+          return
         }
 
-        restart(msg)
+        restart()
       })
     }
     else {
-      restart(msg)
+      restart()
     }
   })
 

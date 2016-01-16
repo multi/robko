@@ -25,6 +25,10 @@ var testEnv = function (cb) {
   exec('source ' + envFile, cb)
 }
 
+var escapeShellStr = function(s) {
+  return s.replace('"', '\\"')
+}
+
 module.exports = function (robot) {
 
   robot.respond(/env test/i, function (msg) {
@@ -69,7 +73,7 @@ module.exports = function (robot) {
       return
     }
 
-    var toAdd = 'export ' + msg.match[1].replace('"', '\\"') + '=' + msg.match[2].replace('"', '\\"')
+    var toAdd = 'export ' + escapeShellStr(msg.match[1]) + '=' + escapeShellStr(msg.match[2])
 
     exec('echo "' + toAdd + '" >> ' + envFile, function (err, stdout, stderr) {
       if (err) {
@@ -89,7 +93,7 @@ module.exports = function (robot) {
       return
     }
 
-    var toDel = 'export ' + msg.match[1].replace('"', '\\"') + '=' + msg.match[2].replace('"', '\\"')
+    var toDel = 'export ' + escapeShellStr(msg.match[1]) + '=' + escapeShellStr(msg.match[2])
 
     exec('grep -v "' + toDel + '" ' + envFile + ' > ' + envFile + '.tmp && mv ' + envFile + '.tmp ' + envFile, function (err, stdout, stderr) {
       if (err) {

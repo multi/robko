@@ -24,13 +24,13 @@ updatesAvailable = (msg) ->
 
 module.exports = (robot) ->
 
-  robot.respond /pending updates?\??$/, (msg) ->
+  robot.respond /pending updates?\??$/i, (msg) ->
     if downloaded_updates
       updatesAvailable msg
     else
       msg.send "all dependencies are up-to-date"
 
-  robot.respond /git pull$/, (msg) ->
+  robot.respond /git pull$/i, (msg) ->
     try
       msg.send "git pull..."
       child_process.exec 'git pull', (error, stdout, stderr) ->
@@ -46,7 +46,7 @@ module.exports = (robot) ->
     catch error
         msg.send "git pull failed: " + error
 
-  robot.respond /npm install$/, (msg) ->
+  robot.respond /npm install$/i, (msg) ->
     try
       msg.send "npm install..."
       child_process.exec 'npm i --production --no-optional', (error, stdout, stderr) ->
