@@ -35,13 +35,13 @@ module.exports = function (robot) {
     fs.mkdirSync(ORGANIC_CELLS_PATH)
   }
 
-  if (!robot.brain._cells) {
-    robot.brain._cells = {}
+  if (!robot.brain.data._cells) {
+    robot.brain.data._cells = {}
   }
 
   var getCellNames = function () {
     var names = []
-    for (var cellName in robot.brain._cells) {
+    for (var cellName in robot.brain.data._cells) {
       names.push(cellName)
     }
     return names
@@ -58,7 +58,7 @@ module.exports = function (robot) {
   })
 
   robot.respond(/cell add (.*)/, function (msg) {
-    if (robot.brain._cells[msg.match[1]]) {
+    if (robot.brain.data._cells[msg.match[1]]) {
       msg.send([
         'cell ',
         msg.match[1],
@@ -69,7 +69,7 @@ module.exports = function (robot) {
     }
 
     var token = uuid.v1()
-    robot.brain._cells[msg.match[1]] = token
+    robot.brain.data._cells[msg.match[1]] = token
     msg.send([
       'ok added. please post cell.json eg. `curl -H \'cell-token: ',
       token,
@@ -79,7 +79,7 @@ module.exports = function (robot) {
   })
 
   robot.respond(/cell del (.*)/, function (msg) {
-    if (!robot.brain._cells[msg.match[1]]) {
+    if (!robot.brain.data._cells[msg.match[1]]) {
       msg.send([
         'cell ',
         msg.match[1],
@@ -90,21 +90,21 @@ module.exports = function (robot) {
     }
 
     fs.unlink(
-      path.join(ORGANIC_CELLS_PATH, robot.brain._cells[msg.match[1]] + '.json'),
+      path.join(ORGANIC_CELLS_PATH, robot.brain.data._cells[msg.match[1]] + '.json'),
       function (err) {
         if (err) {
           console.error(err)
           msg.send('unlink error: ' + err)
         }
 
-        delete robot.brain._cells[msg.match[1]]
+        delete robot.brain.data._cells[msg.match[1]]
         msg.send('ok deleted.')
       }
     )
   })
 
   robot.respond(/cell json (.*)/, function (msg) {
-    if (!robot.brain._cells[msg.match[1]]) {
+    if (!robot.brain.data._cells[msg.match[1]]) {
       msg.send([
         'cell ',
         msg.match[1],
@@ -115,7 +115,7 @@ module.exports = function (robot) {
     }
 
     fs.readFile(
-      path.join(ORGANIC_CELLS_PATH, robot.brain._cells[msg.match[1]] + '.json'),
+      path.join(ORGANIC_CELLS_PATH, robot.brain.data._cells[msg.match[1]] + '.json'),
       function (err, data) {
         if (err) {
           console.error(err)
@@ -129,7 +129,7 @@ module.exports = function (robot) {
   })
 
   robot.respond(/cell (.*) angel (.*)/, function (msg) {
-    if (!robot.brain._cells[msg.match[1]]) {
+    if (!robot.brain.data._cells[msg.match[1]]) {
       msg.send([
         'cell ',
         msg.match[1],
@@ -139,7 +139,7 @@ module.exports = function (robot) {
       return
     }
 
-    var jsonFile = path.join(ORGANIC_CELLS_PATH, robot.brain._cells[msg.match[1]] + '.json')
+    var jsonFile = path.join(ORGANIC_CELLS_PATH, robot.brain.data._cells[msg.match[1]] + '.json')
 
     fs.readFile(
       jsonFile,
@@ -205,8 +205,8 @@ module.exports = function (robot) {
 
     var cellNameByToken
 
-    for (var cellName in robot.brain._cells) {
-      if (robot.brain._cells[cellName] === req.headers['cell-token']) {
+    for (var cellName in robot.brain.data._cells) {
+      if (robot.brain.data._cells[cellName] === req.headers['cell-token']) {
         cellNameByToken = cellName
         break
       }
@@ -217,10 +217,10 @@ module.exports = function (robot) {
       return
     }
 
-    robot.brain._cells[cellNameByToken] = uuid.v1()
+    robot.brain.data._cells[cellNameByToken] = uuid.v1()
 
     fs.writeFile(
-      path.join(ORGANIC_CELLS_PATH, robot.brain._cells[cellNameByToken] + '.json'),
+      path.join(ORGANIC_CELLS_PATH, robot.brain.data._cells[cellNameByToken] + '.json'),
       JSON.stringify(req.body, null, 2),
       function (err) {
         if (err) {
