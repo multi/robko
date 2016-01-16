@@ -24,6 +24,7 @@ start
 
 #### required
 
+    HUBOT_ENDPOINT=https://example.com
     ENV_FILE=.env.sh
     HUBOT_AUTH_ADMIN
     HUBOT_TEAM_ADMIN
@@ -54,3 +55,5 @@ start
     HUBOT_GOOGLE_IMAGES_FALLBACK - The URL to use when API fails. `{q}` will be replaced with the query string.
 
     HUBOT_GITHUB_WEBHOOK_SECRET
+
+    ORGANIC_CELLS_PATH

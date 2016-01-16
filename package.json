@@ -9,6 +9,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "angelscripts-cellcmds": "^0.2.3",
     "cleverbot-node": "^0.2.1",
     "github-webhook-middleware": "0.0.2",
     "htmlparser": "^1.7.7",
@@ -37,7 +38,9 @@
     "jsdom": "^7.2.2",
     "lodash": "^4.0.0",
     "nodemon": "^1.8.1",
+    "organic-angel": "^0.3.2",
     "soupselect": "^0.2.0",
+    "uuid": "^2.0.1",
     "xml2js": "^0.4.15"
   }
 }
