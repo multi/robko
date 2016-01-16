@@ -24,9 +24,9 @@ module.exports = function (robot) {
         package.version,
         '* _(powered by Hubot ',
         robot.version,
-        ')_ [*',
+        ')_ *[',
         package.repository.url,
-        '*]'
+        ']*'
       ].join('')
     )
   })
