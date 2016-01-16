@@ -40,7 +40,6 @@ start
 #### available
 
     HUBOT_LOG_LEVEL=info
-    SLACK_LOG_LEVEL=info
 
     EXPRESS_USER
     EXPRESS_PASSWORD
