@@ -10,11 +10,18 @@ robko is a Camplight chat bot built on the [Hubot][hubot] framework.
 
 ### running
 
+    $ cd robko
     $ npm i --no-optional
 
 define required env params in `.env.sh`
 
     $ touch .env.sh
+
+generate openssl keys used by `organic-cells` script
+
+    $ mkdir ssh
+    $ ssh-keygen -t rsa -b 4096 -C "robko@"$(hostname) -f ssh/id_rsa -N ''
+    $ chmod 400 ssh/id_rsa
 
 start
 
