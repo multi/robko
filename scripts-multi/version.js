@@ -17,7 +17,7 @@ var package = require('../package')
 
 module.exports = function (robot) {
 
-  robot.respond(/version/i, function (msg) {
+  robot.respond(/version$/i, function (msg) {
     msg.send(
       [
         '> _running version_ *',

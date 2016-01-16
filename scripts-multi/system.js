@@ -9,6 +9,7 @@
 //
 // Commands:
 //   hubot sys info - /etc/profile.d/motd.sh
+//   hubot sys public key - prints robot public key
 //
 // Notes:
 //   example
@@ -21,6 +22,7 @@
 // Author:
 //   multi
 
+var fs = require('fs')
 var exec = require('child_process').exec
 
 var execCmd = function (cmd, msg) {
@@ -36,10 +38,24 @@ var execCmd = function (cmd, msg) {
 
 module.exports = function (robot) {
 
-  robot.respond(/sys (.*)/i, function (msg) {
+  robot.respond(/sys (.*)$/i, function (msg) {
     switch (msg.match[1]) {
       case 'info':
         execCmd('test -f /etc/profile.d/motd.sh && /etc/profile.d/motd.sh', msg)
+      break
+      case 'public key':
+        fs.readFile(
+          'keys/id_rsa.pub',
+          function (err, data) {
+            if (err) {
+              console.error(err)
+              msg.send('read error: ' + err)
+              return
+            }
+
+            msg.send('```' + data.toString('utf8') + '```')
+          }
+        )
       break
     }
   })

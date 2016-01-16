@@ -24,5 +24,6 @@
   "yoda-quotes.coffee",
   "octocat.coffee",
   "jokels.coffee",
-  "room-info.coffee"
+  "room-info.coffee",
+  "ping.coffee"
 ]
