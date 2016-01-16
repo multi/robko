@@ -21,6 +21,7 @@ var restart = function (msg) {
   if (restarting) return
   restarting = true
   msg.send('restarting...')
+  msg.robot.shutdown()
   setTimeout(function () {
     restarting = false
     exec('(sleep 2 && touch .touch-to-restart) &')
