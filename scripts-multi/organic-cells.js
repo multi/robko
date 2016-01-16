@@ -54,10 +54,11 @@ module.exports = function (robot) {
       return
     }
 
-    msg.send('*< ' + cellNames.join(' >* *< ') + ' >*')
+    msg.send('*' + cellNames.join('*, *') + '*')
   })
 
   robot.respond(/cell add (.*)/, function (msg) {
+    console.log(msg)
     if (robot.brain.data._cells[msg.match[1]]) {
       msg.send([
         'cell ',
