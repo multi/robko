@@ -54,7 +54,10 @@ module.exports = function (robot) {
       return
     }
 
-    msg.send(cellNames.join(', '))
+    robot.emit('slack-attachment', {
+      text: '*' + cellNames.join('*, *') + '*',
+      mrkdwn: true,
+    })
   })
 
   robot.respond(/cell add (.*)/, function (msg) {
@@ -123,7 +126,7 @@ module.exports = function (robot) {
           return
         }
 
-        msg.send(data)
+        msg.send(data.toString('utf8'))
       }
     )
   })
