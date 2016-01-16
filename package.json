@@ -10,7 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "angelscripts-cellcmds": "^0.2.3",
+    "basic-auth": "^1.0.3",
+    "body-parser": "^1.14.2",
     "cleverbot-node": "^0.2.1",
+    "express": "^4.13.3",
     "github-webhook-middleware": "0.0.2",
     "htmlparser": "^1.7.7",
     "hubot": "^2.17.0",
@@ -37,9 +40,11 @@
     "hubot-watcher": "^0.1.0",
     "jsdom": "^7.2.2",
     "lodash": "^4.0.0",
+    "morgan": "^1.6.1",
     "nodemon": "^1.8.1",
     "organic-angel": "^0.3.2",
     "soupselect": "^0.2.0",
+    "toobusy-js": "^0.4.2",
     "uuid": "^2.0.1",
     "xml2js": "^0.4.15"
   }

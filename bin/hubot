@@ -4,4 +4,4 @@ set -e
 
 source bin/bootstrap
 
-exec node_modules/.bin/hubot -n "robko" "$@"
+exec node_modules/.bin/hubot -d -n "robko" "$@"
