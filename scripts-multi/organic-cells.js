@@ -54,11 +54,7 @@ module.exports = function (robot) {
       return
     }
 
-    robot.emit('slack-attachment', {
-      text: cellNames.join(', '),
-      mrkdwn: false,
-      message: msg,
-    })
+    msg.send('*< ' + cellNames.join(' >* *< ') + ' >*')
   })
 
   robot.respond(/cell add (.*)/, function (msg) {
