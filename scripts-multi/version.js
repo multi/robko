@@ -20,13 +20,13 @@ module.exports = function (robot) {
   robot.respond(/version/i, function (msg) {
     msg.send(
       [
-        '> running version *',
+        '> _running version_ *',
         package.version,
         '* _(powered by Hubot ',
         robot.version,
-        ') *[',
+        ')_ [*',
         package.repository.url,
-        ']*_'
+        '*]'
       ].join('')
     )
   })
