@@ -54,6 +54,7 @@ module.exports = (robot) ->
           msg.send "npm install failed: " + stderr
         else
           output = stdout + ''
+          msg.send output
           if /node_modules/.test output
             msg.send "some dependencies updated:\n" + output
             updatesAvailable msg
