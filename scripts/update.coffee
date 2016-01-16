@@ -6,11 +6,12 @@
 #   None
 #
 # Configuration:
-#   None
+#   GIT_SSH_COMMAND="ssh -i keys/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes"
 #
 # Commands:
 #   hubot git pull - Performs a `git pull`
-#   hubot npm install - Performs a `npm i --production --no-optional`
+#   hubot npm install - Performs a `npm i --no-optional`
+#   hubot npm install prod - Performs a `npm i --production --no-optional`
 #   hubot pending update - Informs if there are pending updates (hubot needs a restart)
 #
 # Author:
@@ -21,6 +22,11 @@ downloaded_updates = false
 
 updatesAvailable = (msg) ->
   msg.send "I have some pending updates, KILL ME PLEASE! (hint: @robko process exit)"
+
+env = {}
+
+if process.env.GIT_SSH_COMMAND
+  env.GIT_SSH_COMMAND = process.env.GIT_SSH_COMMAND
 
 module.exports = (robot) ->
 
@@ -33,33 +39,34 @@ module.exports = (robot) ->
   robot.respond /git pull$/i, (msg) ->
     try
       msg.send "git pull..."
-      child_process.exec 'git pull', (error, stdout, stderr) ->
+      child_process.exec "git pull", {env: env}, (error, stdout, stderr) ->
         if error
           msg.send "git pull failed: " + stderr
         else
           output = stdout + ''
           if not /Already up\-to\-date/.test output
             msg.send "my source code changed:\n" + output
-            msg.send "don\'t forget to run npm install ;)"
+            msg.send "don\'t forget to run `npm install prod` ;)"
           else
             msg.send "my source code is up-to-date"
     catch error
         msg.send "git pull failed: " + error
 
-  robot.respond /npm install$/i, (msg) ->
+  robot.respond /npm install( prod)?$/i, (msg) ->
     try
-      msg.send "npm install..."
-      child_process.exec 'npm i --production --no-optional', (error, stdout, stderr) ->
+      prod = if msg.match[1] then '--production' else ''
+      msg.send "npm install #{prod}..."
+      child_process.exec "npm i #{prod} --no-optional", (error, stdout, stderr) ->
         if error
-          msg.send "npm install failed: " + stderr
+          msg.send "npm install #{prod} failed: " + stderr
         else
           output = stdout + ''
-          if /node_modules/.test output
+          if output
             msg.send "some dependencies updated:\n" + output
             updatesAvailable msg
             downloaded_updates = true
           else
             msg.send "all dependencies are up-to-date"
     catch error
-        msg.send "npm install failed: " + error
+        msg.send "npm install #{prod} failed: " + error
 

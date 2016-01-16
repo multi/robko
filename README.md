@@ -17,11 +17,11 @@ define required env params in `.env.sh`
 
     $ touch .env.sh
 
-generate openssl keys used by `organic-cells` script
+generate ssh key
 
-    $ mkdir ssh
-    $ ssh-keygen -t rsa -b 4096 -C "robko@"$(hostname) -f ssh/id_rsa -N ''
-    $ chmod 400 ssh/id_rsa
+    $ mkdir keys
+    $ ssh-keygen -t rsa -b 4096 -C "robko@"$(hostname) -f keys/id_rsa -N ''
+    $ chmod 400 keys/*
 
 start
 
@@ -31,8 +31,8 @@ start
 
 #### required
 
-    HUBOT_ENDPOINT=https://example.com
     ENV_FILE=.env.sh
+    HUBOT_ENDPOINT=https://example.com
     HUBOT_AUTH_ADMIN
     HUBOT_TEAM_ADMIN
     EXPRESS_PORT=3131
@@ -40,9 +40,11 @@ start
 #### available
 
     HUBOT_LOG_LEVEL=info
+
     EXPRESS_USER
     EXPRESS_PASSWORD
-    EXPRESS_BIND_ADDRESS="0.0.0.0"
+    EXPRESS_BIND_ADDRESS="127.0.0.1"
+    EXPRESS_STATIC
 
     REDIS_URL="redis://localhost"
 
@@ -64,3 +66,5 @@ start
     HUBOT_GITHUB_WEBHOOK_SECRET
 
     ORGANIC_CELLS_PATH
+
+    GIT_SSH_COMMAND="ssh -i keys/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes"

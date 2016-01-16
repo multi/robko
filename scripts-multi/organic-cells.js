@@ -73,10 +73,11 @@ module.exports = function (robot) {
     msg.send([
       'ok ',
       msg.match[1],
-      ' added. please post cell.json eg. `curl -H \'cell-token: ',
+      ' added.\nplease post cell.json eg. *`curl -H \'cell-token: ',
       token,
       '\' -H \'Content-Type: application/json\' -d @dna/_staging/cell.json ',
-      process.env.HUBOT_ENDPOINT + '/hubot/organic-cells`'
+      process.env.HUBOT_ENDPOINT + '/hubot/organic-cells`*',
+      '\n*NOTE: make sure that `source` includes robko ssh key, eg. `ssh -i keys/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes user@host`*'
     ].join(''))
   })
 
