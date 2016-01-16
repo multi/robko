@@ -15,9 +15,17 @@
 
 var exec = require('child_process').exec
 
-var restart = function () {
-  exec('(sleep 2 && touch .touch-to-restart) &')
-  process.exit(0)
+var restarting = false
+
+var restart = function (msg) {
+  if (restarting) return
+  restarting = true
+  msg.send('restarting...')
+  setTimeout(function () {
+    restarting = false
+    exec('(sleep 1 && touch .touch-to-restart) &')
+    process.exit(0)
+  }, 5000)
 }
 
 module.exports = function (robot) {
@@ -35,11 +43,11 @@ module.exports = function (robot) {
           return
         }
 
-        restart()
+        restart(msg)
       })
     }
     else {
-      restart()
+      restart(msg)
     }
   })
 
