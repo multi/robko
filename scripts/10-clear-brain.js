@@ -15,7 +15,7 @@
 
 module.exports = function (robot) {
 
-  delete robot.brain.data.history
+  robot.brain.data.history = undefined
 
   robot.brain.save()
 

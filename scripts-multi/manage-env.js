@@ -81,7 +81,7 @@ module.exports = function (robot) {
         return
       }
 
-      msg.send('added ' + toAdd)
+      msg.send('added `export ' + msg.match[1] + '=' + msg.match[2] + '`')
     })
   })
 
@@ -101,7 +101,7 @@ module.exports = function (robot) {
         return
       }
 
-      msg.send('deleted ' + msg.match[1] + '=' + msg.match[2])
+      msg.send('deleted `export ' + msg.match[1] + '=' + msg.match[2] + '`')
     })
   })
 

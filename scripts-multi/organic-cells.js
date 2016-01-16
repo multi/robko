@@ -50,19 +50,19 @@ module.exports = function (robot) {
   robot.respond(/cells? list/, function (msg) {
     var cellNames = getCellNames()
     if (cellNames.length === 0) {
-      msg.send('no cells, i know :(')
+      msg.send('_cells, non i know..._')
       return
     }
 
-    msg.send(cellNames.join(', '))
+    msg.send('*' + cellNames.join('*, *') + '*')
   })
 
   robot.respond(/cell add (.*)/, function (msg) {
     if (robot.brain.data._cells[msg.match[1]]) {
       msg.send([
-        'cell ',
+        'cell *',
         msg.match[1],
-        ' already added.'
+        '* already added.'
       ].join(''))
 
       return
@@ -71,9 +71,9 @@ module.exports = function (robot) {
     var token = uuid.v1()
     robot.brain.data._cells[msg.match[1]] = token
     msg.send([
-      'ok ',
+      'ok *',
       msg.match[1],
-      ' added.\nplease post cell.json eg. `curl -H \'cell-token: ',
+      '* added.\nplease post cell.json eg. `curl -H \'cell-token: ',
       token,
       '\' -H \'Content-Type: application/json\' -d @dna/_staging/cell.json ',
       process.env.HUBOT_ENDPOINT + '/hubot/organic-cells`',
@@ -84,9 +84,9 @@ module.exports = function (robot) {
   robot.respond(/cell del (.*)/, function (msg) {
     if (!robot.brain.data._cells[msg.match[1]]) {
       msg.send([
-        'cell ',
+        'cell *',
         msg.match[1],
-        ' not found!'
+        '* not found!'
       ].join(''))
 
       return
@@ -102,9 +102,9 @@ module.exports = function (robot) {
 
         delete robot.brain.data._cells[msg.match[1]]
         msg.send([
-          'ok ',
+          'ok *',
           msg.match[1],
-          ' deleted.'
+          '* deleted.'
         ].join(''))
       }
     )
@@ -113,9 +113,9 @@ module.exports = function (robot) {
   robot.respond(/cell json (.*)/, function (msg) {
     if (!robot.brain.data._cells[msg.match[1]]) {
       msg.send([
-        'cell ',
+        'cell *',
         msg.match[1],
-        ' not found!'
+        '* not found!'
       ].join(''))
 
       return
@@ -138,9 +138,9 @@ module.exports = function (robot) {
   robot.respond(/cell (.*) angel (.*)/, function (msg) {
     if (!robot.brain.data._cells[msg.match[1]]) {
       msg.send([
-        'cell ',
+        'cell *',
         msg.match[1],
-        ' not found!'
+        '* not found!'
       ].join(''))
 
       return
@@ -168,8 +168,9 @@ module.exports = function (robot) {
 
         if (!cellJSON[msg.match[2]]) {
           msg.send([
-            'error: cell.json doesn\'t contain ',
-            msg.match[2]
+            'error: `cell.json` doesn\'t contain *',
+            msg.match[2],
+            '*'
           ].join(''))
 
           return
@@ -196,7 +197,7 @@ module.exports = function (robot) {
               return
             }
 
-            msg.send(stdout)
+            msg.send('```' + stdout + '```')
           }
         )
       }
