@@ -46,7 +46,7 @@ module.exports = (robot) ->
           output = stdout + ''
           if not /Already up\-to\-date/.test output
             msg.send "my source code changed:\n" + output
-            msg.send "don\'t forget to run `npm install prod` ;)"
+            msg.send "don\'t forget to run `npm install` ;)"
           else
             msg.send "my source code is up-to-date"
     catch error
