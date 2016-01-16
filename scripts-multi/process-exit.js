@@ -23,9 +23,9 @@ var restart = function (msg) {
   msg.send('restarting...')
   setTimeout(function () {
     restarting = false
-    exec('(sleep 1 && touch .touch-to-restart) &')
+    exec('(sleep 2 && touch .touch-to-restart) &')
     process.exit(0)
-  }, 5000)
+  }, 3000)
 }
 
 module.exports = function (robot) {
