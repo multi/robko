@@ -54,11 +54,10 @@ module.exports = function (robot) {
       return
     }
 
-    msg.send('*' + cellNames.join('*, *') + '*')
+    msg.send(cellNames.join(', '))
   })
 
   robot.respond(/cell add (.*)/, function (msg) {
-    console.log(msg)
     if (robot.brain.data._cells[msg.match[1]]) {
       msg.send([
         'cell ',
@@ -72,7 +71,9 @@ module.exports = function (robot) {
     var token = uuid.v1()
     robot.brain.data._cells[msg.match[1]] = token
     msg.send([
-      'ok added. please post cell.json eg. `curl -H \'cell-token: ',
+      'ok ',
+      msg.match[1],
+      ' added. please post cell.json eg. `curl -H \'cell-token: ',
       token,
       '\' -H \'Content-Type: application/json\' -d @dna/_staging/cell.json ',
       process.env.HUBOT_ENDPOINT + '/hubot/organic-cells`'
@@ -99,7 +100,11 @@ module.exports = function (robot) {
         }
 
         delete robot.brain.data._cells[msg.match[1]]
-        msg.send('ok deleted.')
+        msg.send([
+          'ok ',
+          msg.match[1]
+          ' deleted.'
+        ].join(''))
       }
     )
   })
