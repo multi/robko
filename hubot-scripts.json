@@ -10,7 +10,6 @@
   "fortune.coffee",
   "github-credentials.coffee",
   "github-status.coffee",
-  "history.coffee",
   "ip.coffee",
   "news.coffee",
   "tasks.coffee",

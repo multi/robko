@@ -32,7 +32,7 @@ var escapeShellStr = function(s) {
 module.exports = function (robot) {
 
   robot.respond(/env test/i, function (msg) {
-    if (!robot.auth.isAdmin(msg.message.user)) {
+    if (!robot.auth.isAdmin(msg.envelope.user)) {
       msg.send('sorry, only admins can do that.')
       return
     }
@@ -50,7 +50,7 @@ module.exports = function (robot) {
   robot.on('env:test', testEnv)
 
   robot.respond(/env list/i, function (msg) {
-    if (!robot.auth.isAdmin(msg.message.user)) {
+    if (!robot.auth.isAdmin(msg.envelope.user)) {
       msg.send('sorry, only admins can do that.')
       return
     }
@@ -68,7 +68,7 @@ module.exports = function (robot) {
   robot.respond(/env add export (.*)=(.*)/i, function (msg) {
     if (!msg.match[1] || !msg.match[2]) return
 
-    if (!robot.auth.isAdmin(msg.message.user)) {
+    if (!robot.auth.isAdmin(msg.envelope.user)) {
       msg.send('sorry, only admins can do that.')
       return
     }
@@ -88,7 +88,7 @@ module.exports = function (robot) {
   robot.respond(/env del export (.*)=(.*)/i, function (msg) {
     if (!msg.match[1] || !msg.match[2]) return
 
-    if (!robot.auth.isAdmin(msg.message.user)) {
+    if (!robot.auth.isAdmin(msg.envelope.user)) {
       msg.send('sorry, only admins can do that.')
       return
     }

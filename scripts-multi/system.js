@@ -17,7 +17,7 @@
 //   uname -sorm
 //   echo $(/usr/bin/df -h | grep -E "boot|root|var|home|/tmp" | awk '{print $6"\t"$5}')
 //   uptime | cut -d' ' -f3-
-// 
+//
 // Author:
 //   multi
 
@@ -30,7 +30,7 @@ var execCmd = function (cmd, msg) {
       return
     }
 
-    msg.send(stdout)
+    msg.send('```' + stdout + '```')
   })
 }
 

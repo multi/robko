@@ -32,7 +32,7 @@ var restart = function (msg) {
 module.exports = function (robot) {
 
   robot.respond(/process exit/i, function (msg) {
-    if (!robot.auth.isAdmin(msg.message.user)) {
+    if (!robot.auth.isAdmin(msg.envelope.user)) {
       msg.send('sorry, only admins can do that.')
       return
     }

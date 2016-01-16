@@ -51,8 +51,6 @@ start
     HUBOT_CASH_CURRENCY_SYMBOL="$"
     HUBOT_CASH_THOUSANDS_SEPARATOR=","
 
-    HUBOT_HISTORY_LINES=10
-
     HUBOT_TELL_ALIASES - Comma-separated string of command aliases for "tell".
     HUBOT_TELL_RELATIVE_TIME - Set to use relative time strings ("2 hours ago")
 
