@@ -10,8 +10,8 @@
 #
 # Commands:
 #   hubot git pull - Performs a `git pull`
-#   hubot npm install - Performs a `npm i --no-optional`
-#   hubot npm install prod - Performs a `npm i --production --no-optional`
+#   hubot npm install - Performs a `npm i --production --no-optional`
+#   hubot npm install dev - Performs a `npm i --no-optional`
 #   hubot pending update - Informs if there are pending updates (hubot needs a restart)
 #
 # Author:
@@ -52,9 +52,9 @@ module.exports = (robot) ->
     catch error
         msg.send "git pull failed: " + error
 
-  robot.respond /npm install( prod)?$/i, (msg) ->
+  robot.respond /npm install( dev)?$/i, (msg) ->
     try
-      prod = if msg.match[1] then '--production' else ''
+      prod = if !msg.match[1] then '--production' else ''
       msg.send "npm install #{prod}..."
       child_process.exec "npm i #{prod} --no-optional", (error, stdout, stderr) ->
         if error
