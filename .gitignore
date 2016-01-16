@@ -1,8 +1,7 @@
 node_modules
+.hubot_history
 
 .env.sh*
 .deploy.key*
-
-.hubot_history
-
 cells
+ssh
