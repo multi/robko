@@ -102,7 +102,7 @@ module.exports = function (robot) {
         delete robot.brain.data._cells[msg.match[1]]
         msg.send([
           'ok ',
-          msg.match[1]
+          msg.match[1],
           ' deleted.'
         ].join(''))
       }
