@@ -54,7 +54,7 @@ module.exports = function (robot) {
       return
     }
 
-    msg.send(cellNames)
+    msg.send(cellNames.join(', '))
   })
 
   robot.respond(/cell add (.*)/, function (msg) {
