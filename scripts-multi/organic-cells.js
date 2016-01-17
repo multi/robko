@@ -28,6 +28,8 @@ var ORGANIC_CELLS_PATH = process.env.ORGANIC_CELLS_PATH || 'cells'
 
 module.exports = function (robot) {
 
+  var webhookEndpoint = '/' + robot.name + '/organic-cells'
+
   try {
     fs.statSync(ORGANIC_CELLS_PATH)
   }
@@ -73,11 +75,11 @@ module.exports = function (robot) {
     msg.send([
       'ok *',
       msg.match[1],
-      '* added.\nplease post cell.json eg. `curl -H \'cell-token: ',
+      '* added.\nplease post cell.json eg.\n> `curl -H \'cell-token: ',
       token,
-      '\' -H \'Content-Type: application/json\' -d @dna/_staging/cell.json ',
-      process.env.HUBOT_ENDPOINT + '/hubot/organic-cells`',
-      '\n*NOTE: make sure that `source` includes robko ssh key, eg. `ssh -i keys/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes user@host`*'
+      '\' -H \'Content-Type: application/json\' -d @path/to/cell.json ',
+      process.env.HUBOT_ENDPOINT + webhookEndpoint + '`',
+      '\n> *NOTE: before uploading, set in `cell.json#remote` path to ssh key, eg. `ssh -i keys/id_rsa -o VisualHostKey=yes -o PreferredAuthentications=publickey -o KbdInteractiveAuthentication=no -o PasswordAuthentication=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes user@host`*'
     ].join(''))
   })
 
@@ -204,7 +206,7 @@ module.exports = function (robot) {
     )
   })
 
-  robot.router.post('/hubot/organic-cells', function (req, res) {
+  robot.router.post(webhookEndpoint, function (req, res) {
     // XXX nice to have: cell.json validation
     if (!req.headers['cell-token'] || !req.body) {
       res.status(400).end()
