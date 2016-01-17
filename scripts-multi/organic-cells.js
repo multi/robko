@@ -78,8 +78,9 @@ module.exports = function (robot) {
       '* added.\nplease post cell.json eg.\n> `curl -H \'cell-token: ',
       token,
       '\' -H \'Content-Type: application/json\' -d @path/to/cell.json ',
-      process.env.HUBOT_ENDPOINT + webhookEndpoint + '`',
-      '\n> *NOTE: before uploading, set in `cell.json#remote` path to ssh key, eg. `ssh -i keys/id_rsa -o VisualHostKey=yes -o PreferredAuthentications=publickey -o KbdInteractiveAuthentication=no -o PasswordAuthentication=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes user@host`*'
+      process.env.HUBOT_ENDPOINT + webhookEndpoint + '`\n',
+      '*NOTE: before uploading, set in `cell.json#remote` path to ssh key, eg.\n> ',
+      '> `ssh -i keys/id_rsa -o VisualHostKey=yes -o PreferredAuthentications=publickey -o KbdInteractiveAuthentication=no -o PasswordAuthentication=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes user@host`*'
     ].join(''))
   })
 
@@ -99,7 +100,7 @@ module.exports = function (robot) {
       function (err) {
         if (err) {
           console.error(err)
-          msg.send('unlink error: ' + err)
+          // msg.send('unlink error: ' + err)
         }
 
         delete robot.brain.data._cells[msg.match[1]]

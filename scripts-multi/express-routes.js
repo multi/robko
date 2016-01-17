@@ -30,7 +30,7 @@ module.exports = function (robot) {
         route.stack.forEach(function (r) {
           var method = r.method ? r.method.toUpperCase() : null
           if (!methodsDone[method] && method) {
-            output += '*' + method + '*\t' + route.path + '\n'
+            output += method + '\t' + route.path + '\n'
             methodsDone[method] = true
           }
         })
