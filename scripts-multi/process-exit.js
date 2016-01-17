@@ -15,7 +15,7 @@
 
 var exec = require('child_process').exec
 
-var restart = function (msg) {
+var restart = function (robot) {
   robot.shutdown()
   exec('(sleep 1 && touch .touch-to-restart) &')
   process.exit(0)
