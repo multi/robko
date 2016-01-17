@@ -1,5 +1,5 @@
 # Description:
-#   Because animals are animals.
+#   Because animals are animals. http://animalsbeingdicks.com/
 #
 # Dependencies:
 #   "htmlparser": "1.7.6"
@@ -9,7 +9,7 @@
 #   None
 #
 # Commands:
-#   hubot animal me - Grab a random gif from http://animalsbeingdicks.com/
+#   hubot animal me - Grab a random gif from animalsbeingdicks
 #
 # Author:
 #   unsay

@@ -25,5 +25,6 @@
   "octocat.coffee",
   "jokels.coffee",
   "room-info.coffee",
-  "ping.coffee"
+  "ping.coffee",
+  "remind.coffee"
 ]
