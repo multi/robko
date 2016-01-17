@@ -27,8 +27,8 @@ module.exports = (robot) ->
       if user.githubLogin
         userName = user.name
         if user.slack and user.slack.profile and user.slack.profile.real_name_normalized
-          userName += " _#{user.slack.profile.real_name_normalized}_"
-        theReply += "#{userName} _is_ *#{user.githubLogin}*\n"
+          userName += " _(#{user.slack.profile.real_name_normalized})_"
+        theReply += "#{userName} _is_ *`#{user.githubLogin}`*\n"
 
     msg.send theReply
 
