@@ -21,6 +21,9 @@
 #   * The script assumes that user IDs will be unique on the service end as to
 #     correctly identify a user. Names were insecure as a user could impersonate
 #     a user
+#
+# Author:
+#   alexwilliamsca, tombell, multi
 
 config =
   admin_list: process.env.HUBOT_AUTH_ADMIN
@@ -64,7 +67,7 @@ module.exports = (robot) ->
 
   robot.auth = new Auth
 
-  robot.respond /@?(.+) ha(s|ve) ([\w:\-]+) role$/i, (msg) ->
+  robot.respond /@?(.+) has ([\w:\-]+) role$/i, (msg) ->
     unless robot.auth.isAdmin msg.message.user
       msg.reply "Sorry, only admins can assign roles."
     else
@@ -91,11 +94,8 @@ module.exports = (robot) ->
     unless robot.auth.isAdmin msg.message.user
       msg.reply "Sorry, only admins can remove roles."
     else
-      console.log msg.match
       name = msg.match[1].trim()
-      console.log name
       if name.toLowerCase() is 'i' then name = msg.message.user.name
-      console.log name
       newRole = msg.match[4].trim().toLowerCase()
 
       unless name.toLowerCase() in ['', 'who', 'what', 'where', 'when', 'why']

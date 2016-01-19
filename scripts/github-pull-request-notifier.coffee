@@ -56,7 +56,7 @@ module.exports = (robot) ->
         robot.messageRoom room, what
     catch error
       robot.messageRoom room, "Whoa, I got an error: #{error}"
-      console.log "github pull request notifier error: #{error}. Request: #{req.body}"
+      console.warn "github pull request notifier error: #{error}. Request: #{req.body}"
 
     res.end ""
 
