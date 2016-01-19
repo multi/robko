@@ -30,7 +30,7 @@ module.exports = function (robot) {
         route.stack.forEach(function (r) {
           var method = r.method ? r.method.toUpperCase() : null
           if (!methodsDone[method] && method) {
-            output += method + '\t' + route.path + '\n'
+            output += method + '\t\t' + process.env.HUBOT_ENDPOINT + route.path + '\n'
             methodsDone[method] = true
           }
         })
@@ -41,10 +41,7 @@ module.exports = function (robot) {
       msg.send('No routes defined.')
     }
     else {
-      msg.send(
-        '> ' + process.env.HUBOT_ENDPOINT + '/' + robot.name +
-        '\n```' + output + '```'
-      )
+      msg.send('```' + output + '```')
     }
   })
 
