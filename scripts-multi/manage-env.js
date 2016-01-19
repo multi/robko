@@ -26,7 +26,7 @@ var testEnv = function (cb) {
 }
 
 var escapeShellStr = function(s) {
-  return s.replace('"', '\\"')
+  return s.replace(/"/g, '\\"')
 }
 
 module.exports = function (robot) {

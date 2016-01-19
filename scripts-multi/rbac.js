@@ -23,7 +23,7 @@ var async = require('async')
 // robot.brain.data._acl: [{cmd, re, roles}]
 
 var getCmdRegExp = function(cmd) {
-  return new RegExp('^' + cmd.replace('*', '.*') + '$', 'i')
+  return new RegExp('^' + cmd.replace(/\*/g, '.*') + '$', 'i')
 }
 
 module.exports = function (robot) {
@@ -46,7 +46,7 @@ module.exports = function (robot) {
     }
 
     var textToTest = context.response.message.text
-      .replace(context.response.robot.name + ' ', '')
+      .substring(context.response.robot.name.length + 1)
 
     async.some(context.response.robot.brain.data._acl, function (rule, cb) {
       if (rule.re.test(textToTest)) {
