@@ -22,11 +22,22 @@ var async = require('async')
 
 // robot.brain.data._acl: [{cmd, re, roles}]
 
+var getCmdRegExp = function(cmd) {
+  return new RegExp('^' + cmd.replace('*', '.*') + '$', 'i')
+}
+
 module.exports = function (robot) {
 
   if (!robot.brain.data._acl) {
     robot.brain.data._acl = []
   }
+
+  // on brain loaded -> rebuild commands regexps
+  robot.brain.on('loaded', function () {
+    robot.brain.data._acl.forEach(function (rule) {
+      rule.re = getCmdRegExp(rule.cmd)
+    })
+  })
 
   robot.listenerMiddleware(function (context, next, done) {
     if (context.response.robot.auth.isAdmin(context.response.message.user)) {
@@ -61,17 +72,13 @@ module.exports = function (robot) {
 
     var role = msg.match[1].trim().toLowerCase()
     var cmd = msg.match[2].trim().toLowerCase()
-    var cmdRe = new RegExp(
-      '^' + cmd.replace('*', '.*') + '$',
-      'i'
-    )
     var rules = robot.brain.data._acl.find(function (rule) {
       return rule.cmd === cmd
     })
     if (!rules) {
       rules = {
         cmd: cmd,
-        re: cmdRe,
+        re: getCmdRegExp(cmd),
         roles: [],
       }
       robot.brain.data._acl.push(rules)
