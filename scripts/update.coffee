@@ -21,7 +21,7 @@ child_process = require 'child_process'
 downloaded_updates = false
 
 updatesAvailable = (msg) ->
-  msg.send "I have some pending updates, KILL ME PLEASE! (hint: @robko process exit)"
+  msg.send "I have some pending updates, KILL ME PLEASE! (hint: #{msg.robot.name} process exit)"
 
 env = {}
 

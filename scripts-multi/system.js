@@ -53,7 +53,10 @@ module.exports = function (robot) {
               return
             }
 
-            msg.send('```' + data.toString('utf8') + '```')
+            msg.send(
+              '> ' + process.env.HUBOT_ENDPOINT + '/' + robot.name +
+              '\n```' + data.toString('utf8') + '```'
+            )
           }
         )
       break

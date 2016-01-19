@@ -15,10 +15,11 @@
 
 module.exports = function (robot) {
 
-  robot.brain.on('loaded', function () {
-    delete robot.brain.data.plusPlus
-
-    robot.brain.save()
-  })
+  // XXX uncomment and use it if needed
+  // robot.brain.on('loaded', function () {
+  //   delete robot.brain.data...
+  //
+  //   robot.brain.save()
+  // })
 
 }

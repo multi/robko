@@ -10,7 +10,7 @@
 #
 # Commands:
 #   hubot who do you know - List all the users with github logins tracked by Hubot
-#   hubot i am `maddox` - map your user to the github login `maddox`
+#   hubot i am maddox - map your user to the github login `maddox`
 #   hubot who am i - reveal your mapped github login
 #   hubot forget me - de-map your user to your github login
 #
