@@ -9,6 +9,7 @@
 #
 # Commands:
 #   hubot git pull - Performs a `git pull`
+#   hubot clear node_modules - Performs a `rm -rf node_modules`
 #   hubot npm install - Performs a `npm i --production --no-optional`
 #   hubot npm install dev - Performs a `npm i --no-optional`
 #   hubot pending update - Informs if there are pending updates (hubot needs a restart)
@@ -70,3 +71,13 @@ module.exports = (robot) ->
     catch error
         msg.send "npm install #{prod} failed: " + error
 
+  robot.respond /clear node_modules$/i, (msg) ->
+    try
+      msg.send "rm -rf node_modules..."
+      child_process.exec "rm -rf node_modules", (error, stdout, stderr) ->
+        if error
+          msg.send "rm -rf node_modules failed: " + stderr
+        else
+          msg.send "don\'t forget to run `npm install` ;)"
+    catch error
+        msg.send "rm -rf node_modules failed: " + error
