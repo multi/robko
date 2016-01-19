@@ -41,7 +41,10 @@ module.exports = function (robot) {
       msg.send('No routes defined.')
     }
     else {
-      msg.send('```' + output + '```')
+      msg.send(
+        '> ' + process.env.HUBOT_ENDPOINT + '/' + robot.name +
+        '\n```' + output + '```'
+      )
     }
   })
 
