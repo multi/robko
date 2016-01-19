@@ -1,12 +1,11 @@
 # Description:
 #   Allows hubot to update itself using git pull and npm install.
-#   If updates are downloaded you'll need to restart hubot, for example using "hubot process exit" (restart using a watcher like nodemon).
 #
 # Dependencies:
 #   None
 #
 # Configuration:
-#   GIT_SSH_COMMAND="ssh -i keys/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes"
+#   GIT_SSH_COMMAND="ssh -i keys/id_rsa -o VisualHostKey=yes -o PreferredAuthentications=publickey -o KbdInteractiveAuthentication=no -o PasswordAuthentication=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes"
 #
 # Commands:
 #   hubot git pull - Performs a `git pull`
@@ -15,7 +14,8 @@
 #   hubot pending update - Informs if there are pending updates (hubot needs a restart)
 #
 # Author:
-#   benjamine, multi
+#   benjamine
+#   multi
 
 child_process = require 'child_process'
 downloaded_updates = false

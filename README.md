@@ -25,7 +25,7 @@ generate ssh key
 
 start
 
-    $ node_modules/.bin/nodemon -w .touch-to-restart -x bin/hubot -r scripts-multi [-r scripts-{github-handle} -r ...]
+    $ bin/hubot -r scripts-multi [-r scripts-{github-handle} -r ...]
 
 ### environment parameters
 
@@ -65,4 +65,4 @@ start
 
     ORGANIC_CELLS_PATH
 
-    GIT_SSH_COMMAND="ssh -i keys/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes"
+    GIT_SSH_COMMAND="ssh -i keys/id_rsa -o VisualHostKey=yes -o PreferredAuthentications=publickey -o KbdInteractiveAuthentication=no -o PasswordAuthentication=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes"

@@ -8,23 +8,16 @@
 //   None
 //
 // Commands:
-//   hubot process exit - process.exit(0) hubot
+//   hubot process exit - process.exit() hubot
 //
 // Author:
 //   multi
 
 var exec = require('child_process').exec
 
-var restarting = false
-
-var restart = function (robot) {
-  if (restarting) return
-  restarting = true
+var exit = function (robot) {
   robot.shutdown()
-  setTimeout(function () {
-    exec('(sleep 1 && touch .touch-to-restart) &')
-    process.exit(0)
-  }, 4000)
+  process.exit()
 }
 
 module.exports = function (robot) {
@@ -37,11 +30,11 @@ module.exports = function (robot) {
           return
         }
 
-        restart(robot)
+        exit(robot)
       })
     }
     else {
-      restart(robot)
+      exit(robot)
     }
   })
 

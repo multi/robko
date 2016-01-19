@@ -45,7 +45,6 @@
     "lodash": "^4.0.0",
     "moment": "^2.11.1",
     "morgan": "^1.6.1",
-    "nodemon": "^1.8.1",
     "organic-angel": "^0.3.2",
     "soupselect": "^0.2.0",
     "toobusy-js": "^0.4.2",
