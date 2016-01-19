@@ -35,19 +35,11 @@ module.exports = function (robot) {
     }
 
     var textToTest = context.response.message.text
-      .replace(robot.name + ' ', '')
+      .replace(context.response.robot.name + ' ', '')
 
-    async.some(robot.brain.data._acl, function (rule, cb) {
+    async.some(context.response.robot.brain.data._acl, function (rule, cb) {
       if (rule.re.test(textToTest)) {
-        var hasRole = rule.roles.find(function (role) {
-          return (
-            context.response.message.user.roles
-            && context.response.message.user.roles.length > 0
-            && context.indexOf(role) !== -1
-          )
-        })
-
-        cb(!hasRole)
+        cb(!context.response.robot.auth.hasRole(context.response.message.user, rule.roles))
       } else {
         cb(false)
       }

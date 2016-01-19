@@ -9,11 +9,11 @@
 //   ORGANIC_CELLS_PATH - optional (defaults to `cells`)
 //
 // Commands:
-//   hubot cells? list
-//   hubot cell add {name}
-//   hubot cell del {name}
-//   hubot cell json {name}
-//   hubot cell {name} angel {cmd}
+//   hubot cells? list - list known organic cells
+//   hubot cell add {name} - add organic cell (allowed characters in name `A-Z`, `a-z`, `0-9`, `_`, `-`, `:`)
+//   hubot cell del {name} - remove organic cell (allowed characters in name `A-Z`, `a-z`, `0-9`, `_`, `-`, `:`)
+//   hubot cell json {name} - print cell.json (allowed characters in name `A-Z`, `a-z`, `0-9`, `_`, `-`, `:`)
+//   hubot cell {name} angel {cmd} - exec angel command on cell (allowed characters in name `A-Z`, `a-z`, `0-9`, `_`, `-`, `:`)
 //
 // Author:
 //   multi
@@ -49,7 +49,7 @@ module.exports = function (robot) {
     return names
   }
 
-  robot.respond(/cells? list/, function (msg) {
+  robot.respond(/cells? list$/i, function (msg) {
     var cellNames = getCellNames()
     if (cellNames.length === 0) {
       msg.send('_cells, non i know..._')
@@ -59,7 +59,7 @@ module.exports = function (robot) {
     msg.send('*' + cellNames.join('*, *') + '*')
   })
 
-  robot.respond(/cell add (.*)/, function (msg) {
+  robot.respond(/cell add ([\w:\-]+)$/i, function (msg) {
     if (robot.brain.data._cells[msg.match[1]]) {
       msg.send([
         'cell *',
@@ -84,7 +84,7 @@ module.exports = function (robot) {
     ].join(''))
   })
 
-  robot.respond(/cell del (.*)/, function (msg) {
+  robot.respond(/cell del ([\w:\-]+)$/i, function (msg) {
     if (!robot.brain.data._cells[msg.match[1]]) {
       msg.send([
         'cell *',
@@ -113,7 +113,7 @@ module.exports = function (robot) {
     )
   })
 
-  robot.respond(/cell json (.*)/, function (msg) {
+  robot.respond(/cell json ([\w:\-]+)$/i, function (msg) {
     if (!robot.brain.data._cells[msg.match[1]]) {
       msg.send([
         'cell *',
@@ -138,7 +138,7 @@ module.exports = function (robot) {
     )
   })
 
-  robot.respond(/cell (.*) angel (.*)/, function (msg) {
+  robot.respond(/cell ([\w:\-]+) angel ([\w:\-]+)$/i, function (msg) {
     if (!robot.brain.data._cells[msg.match[1]]) {
       msg.send([
         'cell *',
