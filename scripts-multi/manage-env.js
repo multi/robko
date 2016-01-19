@@ -55,7 +55,7 @@ module.exports = function (robot) {
     })
   })
 
-  robot.respond(/env add ([A-Z_]+)=(.*)/i, function (msg) {
+  robot.respond(/env add ([A-Z_]+)=(.+)$/i, function (msg) {
     if (!msg.match[1] || !msg.match[2]) return
 
     var toAdd = 'export ' + escapeShellStr(msg.match[1]) + '=' + escapeShellStr(msg.match[2])
@@ -70,7 +70,7 @@ module.exports = function (robot) {
     })
   })
 
-  robot.respond(/env del ([A-Z_]+)=(.*)/i, function (msg) {
+  robot.respond(/env del ([A-Z_]+)=(.+)$/i, function (msg) {
     if (!msg.match[1] || !msg.match[2]) return
 
     var toDel = 'export ' + escapeShellStr(msg.match[1]) + '=' + escapeShellStr(msg.match[2])
