@@ -45,7 +45,7 @@ module.exports = function (robot) {
       }
     }, function (accessDenied) {
       if (accessDenied) {
-        context.response.reply('sorry. you don\'t have access to this command.')
+        context.response.reply('Sorry, you don\'t have access to this command.')
         done()
       } else {
         next()
@@ -55,14 +55,14 @@ module.exports = function (robot) {
 
   robot.respond(/require role (.*) for command (.*)$/i, function (msg) {
     if (!robot.auth.isAdmin(msg.message.user)) {
-      msg.send('sorry, only admins can do that.')
+      msg.send('Sorry, only admins can do that.')
       return
     }
 
     var role = msg.match[1].trim().toLowerCase()
     var cmd = msg.match[2].trim().toLowerCase()
     var cmdRe = new RegExp(
-      cmd.replace('*', '.*'),
+      '^' + cmd.replace('*', '.*') + '$',
       'i'
     )
     var rules = robot.brain.data._acl.find(function (rule) {
@@ -84,16 +84,12 @@ module.exports = function (robot) {
 
   robot.respond(/don't require role (.*) for command (.*)$/i, function (msg) {
     if (!robot.auth.isAdmin(msg.message.user)) {
-      msg.send('sorry, only admins can do that.')
+      msg.send('Sorry, only admins can do that.')
       return
     }
 
     var role = msg.match[1].trim().toLowerCase()
     var cmd = msg.match[2].trim().toLowerCase()
-    var cmdRe = new RegExp(
-      cmd.replace('*', '.*'),
-      'i'
-    )
     var rules = robot.brain.data._acl.find(function (rule) {
       return rule.cmd === cmd
     })
@@ -110,7 +106,7 @@ module.exports = function (robot) {
 
   robot.respond(/list access restrictions/i, function (msg) {
     if (!robot.auth.isAdmin(msg.message.user)) {
-      msg.send('sorry, only admins can do that.')
+      msg.send('Sorry, only admins can do that.')
       return
     }
 
