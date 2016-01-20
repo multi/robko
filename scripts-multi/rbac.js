@@ -28,6 +28,8 @@ var getCmdRegExp = function(cmd) {
 
 module.exports = function (robot) {
 
+  var botNameRegExp = new RegExp('^@?' + robot.name + '(:|,)? ')
+
   if (!robot.brain.data._acl) {
     robot.brain.data._acl = []
   }
@@ -40,24 +42,18 @@ module.exports = function (robot) {
   })
 
   robot.listenerMiddleware(function (context, next, done) {
-    robot.logger.debug('text', context.response.message.text)
     if (context.response.robot.auth.isAdmin(context.response.message.user)) {
       next()
       return
     }
 
     var textToTest = context.response.message.text
-      .substring(context.response.robot.name.length + 1)
-
-    robot.logger.debug('textToTest [' + textToTest + '] user:', context.response.message.user.name, 'roles:', context.response.message.user.roles)
+      .replace(botNameRegExp, '')
 
     async.some(context.response.robot.brain.data._acl, function (rule, cb) {
       if (rule.re.test(textToTest)) {
-        var hasRole = context.response.robot.auth.hasRole(context.response.message.user, rule.roles)
-        robot.logger.debug('match! hasRole?', hasRole, 'rule:', rule.cmd, '::', rule.re, '::', rule.roles)
-        cb(!hasRole)
+        cb(!context.response.robot.auth.hasRole(context.response.message.user, rule.roles))
       } else {
-        robot.logger.debug('no match!')
         cb(false)
       }
     }, function (accessDenied) {
