@@ -40,6 +40,7 @@ module.exports = function (robot) {
   })
 
   robot.listenerMiddleware(function (context, next, done) {
+    robot.logger.debug('text', context.response.message.text)
     if (context.response.robot.auth.isAdmin(context.response.message.user)) {
       next()
       return
