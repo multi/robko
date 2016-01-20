@@ -134,16 +134,9 @@ module.exports = function (robot) {
     })
 
     robot.brain.data._acl.forEach(function (rule) {
-      table.push([
-        '`' + rule.cmd + '`',
-        '*' + rule.roles.join('*, *') + '*',
-      ])
+      table.push([rule.cmd, rule.roles.join(', ')])
     })
 
-    msg.send('Access Restrictions:\n' + table.toString())
-
-    msg.send('```' + table.toString() + '```')
-
-    // msg.send('Access Restrictions:\n' + robot.brain.data._acl.map(function (rule) { return '`' + rule.cmd + '`: *' + rule.roles.join('*, *') + '*' }).join('\n'))
+    msg.send('> Access Restrictions:\n```' + table.toString() + '```')
   })
 }

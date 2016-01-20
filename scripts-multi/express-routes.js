@@ -2,7 +2,7 @@
 //   lists express routes
 //
 // Dependencies:
-//   None
+//   cli-table
 //
 // Configuration:
 //   None
@@ -13,6 +13,8 @@
 // Author:
 //   multi
 
+var Table = require('cli-table')
+
 module.exports = function (robot) {
 
   robot.respond('/express routes$/i', function (msg) {
@@ -20,7 +22,7 @@ module.exports = function (robot) {
       return
     }
 
-    var output = ''
+    var output = []
 
     robot.router._router.stack.forEach(function (stack) {
       if (stack.route) {
@@ -30,18 +32,27 @@ module.exports = function (robot) {
         route.stack.forEach(function (r) {
           var method = r.method ? r.method.toUpperCase() : null
           if (!methodsDone[method] && method) {
-            output += method + '\t' + process.env.HUBOT_ENDPOINT + route.path + '\n'
+            output.push([process.env.HUBOT_ENDPOINT + route.path, method])
             methodsDone[method] = true
           }
         })
       }
     })
 
-    if (!output) {
+    if (output.length === 0) {
       msg.send('No routes defined.')
     }
     else {
-      msg.send('```' + output + '```')
+      var table = new Table({
+        head: [
+          'Endpoint',
+          'Method',
+        ]
+      })
+      
+      table.concat(output)
+
+      msg.send('```' + table.toString() + '```')
     }
   })
 
