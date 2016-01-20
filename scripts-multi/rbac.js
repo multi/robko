@@ -48,10 +48,15 @@ module.exports = function (robot) {
     var textToTest = context.response.message.text
       .substring(context.response.robot.name.length + 1)
 
+    robot.logger.debug('textToTest [' + textToTest + '] user:', context.response.message.user.name, 'roles:', context.response.message.user.roles)
+
     async.some(context.response.robot.brain.data._acl, function (rule, cb) {
       if (rule.re.test(textToTest)) {
-        cb(!context.response.robot.auth.hasRole(context.response.message.user, rule.roles))
+        var hasRole = context.response.robot.auth.hasRole(context.response.message.user, rule.roles)
+        robot.logger.debug('match! hasRole?', hasRole, 'rule:', rule.cmd, '::', rule.re, '::', rule.roles)
+        cb(!hasRole)
       } else {
+        robot.logger.debug('no match!')
         cb(false)
       }
     }, function (accessDenied) {
