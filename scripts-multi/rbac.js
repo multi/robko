@@ -5,6 +5,7 @@
 // Dependencies:
 //   hubot-auth
 //   async
+//   cli-table
 //
 // Configuration:
 //   None
@@ -19,6 +20,7 @@
 
 var remove = require('lodash/remove')
 var async = require('async')
+var Table = require('cli-table')
 
 // robot.brain.data._acl: [{cmd, re, roles}]
 
@@ -124,6 +126,24 @@ module.exports = function (robot) {
       return
     }
 
-    msg.send('access restrictions:\n' + robot.brain.data._acl.map(function (rule) { return '`' + rule.cmd + '`: *' + rule.roles.join('*, *') + '*' }).join('\n'))
+    var table = new Table({
+      head: [
+        'Command Pattern',
+        'Required Roles',
+      ]
+    })
+
+    robot.brain.data._acl.forEach(function (rule) {
+      table.push([
+        '`' + rule.cmd + '`',
+        '*' + rule.roles.join('*, *') + '*',
+      ])
+    })
+
+    msg.send('Access Restrictions:\n' + table.toString())
+
+    msg.send('```' + table.toString() + '```')
+
+    // msg.send('Access Restrictions:\n' + robot.brain.data._acl.map(function (rule) { return '`' + rule.cmd + '`: *' + rule.roles.join('*, *') + '*' }).join('\n'))
   })
 }

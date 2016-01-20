@@ -5,8 +5,8 @@
 #   HUBOT_AUTH_ADMIN - A comma separate list of user IDs
 #
 # Commands:
-#   hubot <user> has <role> role - Assigns a role to a user
-#   hubot <user> doesn't have <role> role - Removes a role from a user
+#   hubot assign role <role> to <user> - Assigns a role to a user
+#   hubot remove role <role> from <user> - Removes a role from a user
 #   hubot what roles does <user> have - Find out what roles a user has
 #   hubot what roles do I have - Find out what roles you have
 #   hubot who has <role> role - Find out who has the given role
@@ -67,13 +67,13 @@ module.exports = (robot) ->
 
   robot.auth = new Auth
 
-  robot.respond /@?(.+) has ([\w:\-]+) role$/i, (msg) ->
+  robot.respond /assign role ([\w:\-]+) to @?(.+)$/i, (msg) ->
     unless robot.auth.isAdmin msg.message.user
       msg.reply "Sorry, only admins can assign roles."
     else
-      name = msg.match[1].trim()
+      name = msg.match[2].trim()
       if name.toLowerCase() is 'i' then name = msg.message.user.name
-      newRole = msg.match[3].trim().toLowerCase()
+      newRole = msg.match[1].trim().toLowerCase()
 
       unless name.toLowerCase() in ['', 'who', 'what', 'where', 'when', 'why']
         user = robot.brain.userForName(name)
@@ -90,13 +90,13 @@ module.exports = (robot) ->
             user.roles.push(newRole)
             msg.reply "OK, #{name} has the '#{newRole}' role."
 
-  robot.respond /@?(.+) do(n['’]t|esn['’]t|es)( not)? have ([\w:\-]+) role$/i, (msg) ->
+  robot.respond /remove role ([\w:\-]+) from @?(.+)$/i, (msg) ->
     unless robot.auth.isAdmin msg.message.user
       msg.reply "Sorry, only admins can remove roles."
     else
-      name = msg.match[1].trim()
+      name = msg.match[2].trim()
       if name.toLowerCase() is 'i' then name = msg.message.user.name
-      newRole = msg.match[4].trim().toLowerCase()
+      newRole = msg.match[1].trim().toLowerCase()
 
       unless name.toLowerCase() in ['', 'who', 'what', 'where', 'when', 'why']
         user = robot.brain.userForName(name)
