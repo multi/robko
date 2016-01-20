@@ -49,8 +49,10 @@ module.exports = function (robot) {
           'Method',
         ]
       })
-      
-      table.concat(output)
+
+      output.forEach(function (o) {
+        table.push(o)
+      })
 
       msg.send('```' + table.toString() + '```')
     }
