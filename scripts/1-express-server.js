@@ -27,20 +27,33 @@ var bodyParser = require('body-parser')
 var toobusy = require('toobusy-js')
 var basicAuth = require('basic-auth')
 
+process.on('uncaughtException', function (err) {
+  switch (err.errno) {
+    case 'EADDRINUSE':
+    case 'ETIMEDOUT':
+      process.exit(1)
+  }
+})
+
 function unauthorized(res) {
   res.setHeader('WWW-Authenticate', 'Basic realm=Authorization Required')
   res.sendStatus(401)
 }
 
-var auth = function (req, res, next) {
+function auth (req, res, next) {
   var user = basicAuth(req)
 
-  if (!user || !user.name || !user.pass ||
-    user.name !== process.env.EXPRESS_USER ||
-    user.pass !== process.env.EXPRESS_PASSWORD
-  ) return unauthorized(res)
+  switch (true) {
+    case !user:
+    case !user.name:
+    case !user.pass:
+    case user.name !== process.env.EXPRESS_USER:
+    case user.pass !== process.env.EXPRESS_PASSWORD:
+      return unauthorized(res)
 
-  next()
+    default:
+      next()
+  }
 }
 
 module.exports = function (robot) {
@@ -72,12 +85,6 @@ module.exports = function (robot) {
   if (process.env.EXPRESS_STATIC) {
     app.use(express.static(process.env.EXPRESS_STATIC))
   }
-
-  process.on('uncaughtException', function (err) {
-    if(err.errno === 'EADDRINUSE') {
-      process.exit(1)
-    }
-  })
 
   robot.router = app
   robot.server = app.listen(
