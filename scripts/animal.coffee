@@ -25,12 +25,18 @@ module.exports = (robot) ->
 randimalMe = (msg, cb) ->
   msg.http("http://animalsbeingdicks.com/random")
     .get() (err, res, body) ->
+      if err
+        msg.send "http error: #{err}"
+        return
       animalMe msg, res.headers.location, (location) ->
         cb location
 
 animalMe = (msg, location, cb) ->
   msg.http(location)
     .get() (err, res, body) ->
+      if err
+        msg.send "http error: #{err}"
+        return
       handler = new HtmlParser.DefaultHandler()
       parser  = new HtmlParser.Parser handler
 

@@ -22,7 +22,7 @@ module.exports = function (robot) {
   robot.respond(/who is in varnalab/i, function (msg) {
     msg.http('http://varnalab.org').get()(function (err, res, body) {
       if (err) {
-        msg.send('error: ' + err)
+        msg.send('http error: ' + err)
         return
       }
 
