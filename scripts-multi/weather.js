@@ -107,7 +107,7 @@ module.exports = function (robot) {
             case 0:
             break
             default:
-              text = '[' + new Date(new Date().getTime() + (index - 1) * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + '] ' + text.replace(/ C /g, ' °C ')
+              text = '[' + item.title[0] + '] ' + text.replace(/ C /g, ' °C ')
           }
 
           return {
