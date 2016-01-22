@@ -18,6 +18,7 @@
 //   multi
 
 var xml2js = require('xml2js')
+var inspect = require('util').inspect
 
 var searchCache = []
 
@@ -48,7 +49,7 @@ module.exports = function (robot) {
     }
 
     if (toQuery.length > 1) {
-      msg.send('more than one locations found, please use the full form <city, state> (eg. Varna, Bulgara)')
+      msg.send('more than one locations found, please use the full form <city, state> (eg. `Varna, Bulgara`)')
       return
     }
 
@@ -76,7 +77,7 @@ module.exports = function (robot) {
           case !result.rss.channel:
           case result.rss.channel.length !== 1:
           case !result.rss.channel[0].item:
-            robot.logger.warn('weather response wrong format', require('util').inspect(result, { depth: null }))
+            robot.logger.warn('weather response wrong format', inspect(result, { depth: null }))
           case result.rss.channel[0].item.length === 0:
             msg.send('no weather information found.')
             return
@@ -90,7 +91,7 @@ module.exports = function (robot) {
             case item.pubDate.length !== 1:
             case !item.title:
             case item.title.length !== 1:
-              robot.logger.warn('weather response wrong format', require('util').inspect(item, { depth: null }))
+              robot.logger.warn('weather response wrong format', inspect(item, { depth: null }))
               return
           }
 
@@ -100,13 +101,13 @@ module.exports = function (robot) {
 
           var imgUrl = item.description[0].match(imgMatcher)
           if (!imgUrl || imgUrl.length !== 2) return
-          imgUrl = imgUrl[1].replace('_31x31', '')
+          imgUrl = imgUrl[1]
 
           return {
-            author_name: item.pubDate[0],
+            author_name: text,
             title: item.title[0],
-            text: text,
-            thumb_url: imgUrl,
+            text: item.pubDate[0],
+            author_icon: imgUrl,
             fallback: item.title[0] + ' :: ' + text,
           }
         }).filter(function (item) {
@@ -153,7 +154,7 @@ module.exports = function (robot) {
           case !result.adc_database.citylist:
           case result.adc_database.citylist.length !== 1:
           case !result.adc_database.citylist[0].location:
-            robot.logger.warn('locations response wrong format', require('util').inspect(result, { depth: null }))
+            robot.logger.warn('locations response wrong format', inspect(result, { depth: null }))
           case result.adc_database.citylist[0].location.length === 0:
             msg.send('no matching locations found.')
             return
@@ -163,12 +164,13 @@ module.exports = function (robot) {
 
         msg.send(result.adc_database.citylist[0].location.map(function (location) {
           return [
-            '*City:* ',
+            'City: *',
             location.$.city,
-            ' *State:* ',
+            '* State: *',
             location.$.state,
-            ' *Location:* ',
+            '* Location: `',
             location.$.location,
+            '`'
           ].join('')
         }).join('\n') + '\nnow, i can remeber location from the search results (hint: @' + robot.name + ' remember weather location <location>)')
       })
@@ -191,7 +193,7 @@ module.exports = function (robot) {
       l: toRemember[0].$.location,
     })
 
-    msg.send('ok. remembered, *' + toRemember[0].$.city + ', ' + toRemember[0].$.state + '* _' + toRemember[0].$.location + '_')
+    msg.send('ok. remembered, *' + toRemember[0].$.city + ', ' + toRemember[0].$.state + '* `' + toRemember[0].$.location + '`')
   })
 
   robot.respond(/forget weather location (.+)$/i, function (msg) {
@@ -210,7 +212,7 @@ module.exports = function (robot) {
       return
     }
 
-    msg.send('ok. removed, *' + removed[0].c + ', ' + removed[0].s + '* _' + removed[0].l + '_')
+    msg.send('ok. removed, *' + removed[0].c + ', ' + removed[0].s + '* `' + removed[0].l + '`')
   })
 
   robot.respond(/list weather locations$/i, function (msg) {
@@ -221,12 +223,13 @@ module.exports = function (robot) {
 
     msg.send(robot.brain.data._weather.map(function (location) {
       return [
-        '*City:* ',
+        'City: *',
         location.c,
-        ' *State:* ',
+        '* State: *',
         location.s,
-        ' *Location:* ',
+        '* Location: `',
         location.l,
+        '`'
       ].join('')
     }).join('\n'))
   })
