@@ -46,7 +46,10 @@ module.exports = (robot) ->
         else
           output = stdout + ''
           if not /Already up\-to\-date/.test output
-            msg.send output
+            if output.length <= (robot.adapter.MAX_MESSAGE_LENGTH || 4000) - 6
+              msg.send "```#{output}```"
+            else
+              msg.send output
             msg.send "don\'t forget to run `npm install` ;)"
           else
             msg.send "my source code is up-to-date"
@@ -63,7 +66,10 @@ module.exports = (robot) ->
         else
           output = stdout + ''
           if output
-            msg.send output
+            if output.length <= (robot.adapter.MAX_MESSAGE_LENGTH || 4000) - 6
+              msg.send "```#{output}```"
+            else
+              msg.send output
             updatesAvailable msg
             downloaded_updates = true
           else

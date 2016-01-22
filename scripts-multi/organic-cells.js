@@ -199,8 +199,11 @@ module.exports = function (robot) {
               msg.send('stderr: ' + stderr + ' err: ' + err)
               return
             }
-
-            msg.send(stdout)
+            if (stdout.length <= (robot.adapter.MAX_MESSAGE_LENGTH || 4000) - 6) {
+              msg.send('```' + stdout + '```')
+            } else {
+              msg.send(stdout)
+            }
           }
         )
       }
