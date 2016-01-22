@@ -117,7 +117,7 @@ module.exports = function (robot) {
         if (robot.adapterName !== 'slack') {
           msg.send(attachments.map(function (att) {
             return att.fallback
-          }).join('\n'))
+          }).join('\r\n'))
 
           return
         }
@@ -165,14 +165,14 @@ module.exports = function (robot) {
         msg.send(result.adc_database.citylist[0].location.map(function (location) {
           return [
             'City: *',
-            location.$.city,
+            location.$.city.replace('`', '\\`'),
             '* State: *',
             location.$.state,
             '* Location: `',
             location.$.location,
             '`'
           ].join('')
-        }).join('\n') + '\nnow, i can remeber location from the search results (hint: @' + robot.name + ' remember weather location <location>)')
+        }).join('\r\n') + '\r\nnow, i can remeber location from the search results (hint: @' + robot.name + ' remember weather location <location>)')
       })
     })
   })
@@ -186,6 +186,8 @@ module.exports = function (robot) {
       msg.send('nothing found by the given location? maybe you should try to find it first (hint: @' + robot.name + ' find weather location <query>) and then I can remember it.')
       return
     }
+
+    toRemember[0].$.city = toRemember[0].$.city.replace('`', '\\`')
 
     robot.brain.data._weather.push({
       c: toRemember[0].$.city,
@@ -231,7 +233,7 @@ module.exports = function (robot) {
         location.l,
         '`'
       ].join('')
-    }).join('\n'))
+    }).join('\r\n'))
   })
 
 }
