@@ -3,6 +3,7 @@
 //
 // Dependencies:
 //   xml2js
+//   cli-table
 //
 // Configuration:
 //   None
@@ -18,6 +19,7 @@
 //   multi
 
 var xml2js = require('xml2js')
+var Table = require('cli-table')
 var inspect = require('util').inspect
 
 var searchCache = []
@@ -49,7 +51,7 @@ module.exports = function (robot) {
     }
 
     if (toQuery.length > 1) {
-      msg.send('more than one locations found, please use the full form <city, state> (eg. `Varna, Bulgara`)')
+      msg.send('more than one locations found, please use the full form <city, state> (eg. Varna, Bulgara)')
       return
     }
 
@@ -163,16 +165,21 @@ module.exports = function (robot) {
 
         searchCache = result.adc_database.citylist[0].location
 
-        msg.send(result.adc_database.citylist[0].location.map(function (location) {
-          return [
-            '*',
-            location.$.city.replace('`', '\\`'),
-            ', ',
-            location.$.state,
-            '* `Location: `',
-            location.$.location.replace('`', '\\`'),
-          ].join('')
-        }).join('\n') + '\nnow, i can remeber location from the search results (hint: @' + robot.name + ' remember weather location <location>)')
+        var table = new Table({
+          head: [
+            'City, State',
+            'Location'
+          ]
+        })
+
+        result.adc_database.citylist[0].location.forEach(function (location) {
+          table.push([
+            location.$.city + ', ' + location.$.state,
+            location.$.location
+          ])
+        })
+
+        msg.send('```' + table.toString() + '```' + '\nnow, i can remeber location from the search results (hint: @' + robot.name + ' remember weather location <location>)')
       })
     })
   })
@@ -193,7 +200,7 @@ module.exports = function (robot) {
       l: toRemember[0].$.location,
     })
 
-    msg.send('ok. remembered, *' + toRemember[0].$.city.replace('`', '\\`') + ', ' + toRemember[0].$.state + '* `' + toRemember[0].$.location.replace('`', '\\`') + '`')
+    msg.send('ok. remembered, *' + toRemember[0].$.city + ', ' + toRemember[0].$.state + '* _' + toRemember[0].$.location + '_')
   })
 
   robot.respond(/forget weather location (.+)$/i, function (msg) {
@@ -212,7 +219,7 @@ module.exports = function (robot) {
       return
     }
 
-    msg.send('ok. removed, *' + removed[0].c.replace('`', '\\`') + ', ' + removed[0].s + '* `' + removed[0].l.replace('`', '\\`') + '`')
+    msg.send('ok. removed, *' + removed[0].c + ', ' + removed[0].s + '* _' + removed[0].l + '_')
   })
 
   robot.respond(/list weather locations$/i, function (msg) {
@@ -221,16 +228,21 @@ module.exports = function (robot) {
       return
     }
 
-    msg.send(robot.brain.data._weather.map(function (location) {
-      return [
-        '*',
-        location.c.replace('`', '\\`'),
-        ', ',
-        location.s,
-        '* `Location: `',
-        location.l.replace('`', '\\`'),
-      ].join('')
-    }).join('\n'))
+    var table = new Table({
+      head: [
+        'City, State',
+        'Location'
+      ]
+    })
+
+    robot.brain.data._weather.forEach(function (location) {
+      table.push([
+        location.c + ', ' + location.s,
+        location.l
+      ])
+    })
+
+    msg.send('```' + table.toString() + '```')
   })
 
 }
