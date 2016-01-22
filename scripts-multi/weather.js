@@ -83,7 +83,7 @@ module.exports = function (robot) {
             return
         }
 
-        var attachments = result.rss.channel[0].item.map(function (item) {
+        var attachments = result.rss.channel[0].item.map(function (item, index) {
           switch (true) {
             case !item.description:
             case item.description.length !== 1:
@@ -103,13 +103,19 @@ module.exports = function (robot) {
           if (!imgUrl || imgUrl.length !== 2) return
           imgUrl = imgUrl[1]
 
+          switch (index) {
+            case 0:
+            break
+            default:
+              text = new Date(new Date().getTime() + (index - 1) * 24 * 60 * 60 * 1000).toISOString().split('T')[0] + ' ' + text
+          }
+
           return {
-            mrkdwn_in: ['text'],
-            author_name: item.title[0],
-            title: text,
-            text: '_last update @ ' + item.pubDate[0] + '_',
+            author_name: text,
             author_icon: imgUrl,
-            fallback: item.title[0] + ' :: ' + text,
+            text: '_last update ' + item.pubDate[0] + '_',
+            mrkdwn_in: ['text'],
+            fallback: text,
           }
         }).filter(function (item) {
           return item !== undefined
@@ -169,7 +175,7 @@ module.exports = function (robot) {
             location.$.city,
             ', ',
             location.$.state,
-            '* _Location:_\n>',
+            '*\n>',
             location.$.location,
           ].join('')
         }).join('\n') + '\nnow, i can remeber location from the search results (hint: @' + robot.name + ' remember weather location <location>)')
@@ -227,7 +233,7 @@ module.exports = function (robot) {
         location.c,
         ', ',
         location.s,
-        '* _Location:_\n>',
+        '*\n>',
         location.l,
       ].join('')
     }).join('\n'))
