@@ -200,7 +200,7 @@ module.exports = function (robot) {
               return
             }
 
-            msg.send('```' + stdout + '```')
+            msg.send(stdout)
           }
         )
       }
