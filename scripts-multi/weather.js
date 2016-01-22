@@ -104,6 +104,7 @@ module.exports = function (robot) {
           imgUrl = imgUrl[1]
 
           return {
+            mrkdwn_in: ['text'],
             author_name: item.title[0],
             title: text,
             text: '_last update @ ' + item.pubDate[0] + '_',
@@ -141,8 +142,6 @@ module.exports = function (robot) {
         return
       }
 
-      robot.logger.debug('find weather location body', inspect(body, { depth: null }))
-
       var parser = new xml2js.Parser()
       parser.parseString(body, function (err, result) {
         if (err) {
@@ -164,17 +163,14 @@ module.exports = function (robot) {
 
         searchCache = result.adc_database.citylist[0].location
 
-        robot.logger.debug('searchCache', inspect(searchCache, { depth: null }))
-
         msg.send(result.adc_database.citylist[0].location.map(function (location) {
           return [
             '*',
-            location.$.city.replace('`', '\`'),
-            '* State: *',
+            location.$.city.replace('`', '\\`'),
+            ', ',
             location.$.state,
-            '* Location: `',
-            location.$.location.replace('`', '\`'),
-            '`'
+            '* `Location: `',
+            location.$.location.replace('`', '\\`'),
           ].join('')
         }).join('\n') + '\nnow, i can remeber location from the search results (hint: @' + robot.name + ' remember weather location <location>)')
       })
@@ -197,7 +193,7 @@ module.exports = function (robot) {
       l: toRemember[0].$.location,
     })
 
-    msg.send('ok. remembered, *' + toRemember[0].$.city.replace('`', '\`') + ', ' + toRemember[0].$.state + '* `' + toRemember[0].$.location.replace('`', '\`') + '`')
+    msg.send('ok. remembered, *' + toRemember[0].$.city.replace('`', '\\`') + ', ' + toRemember[0].$.state + '* `' + toRemember[0].$.location.replace('`', '\\`') + '`')
   })
 
   robot.respond(/forget weather location (.+)$/i, function (msg) {
@@ -216,7 +212,7 @@ module.exports = function (robot) {
       return
     }
 
-    msg.send('ok. removed, *' + removed[0].c.replace('`', '\`') + ', ' + removed[0].s + '* `' + removed[0].l.replace('`', '\`') + '`')
+    msg.send('ok. removed, *' + removed[0].c.replace('`', '\\`') + ', ' + removed[0].s + '* `' + removed[0].l.replace('`', '\\`') + '`')
   })
 
   robot.respond(/list weather locations$/i, function (msg) {
@@ -227,13 +223,12 @@ module.exports = function (robot) {
 
     msg.send(robot.brain.data._weather.map(function (location) {
       return [
-        'City: *',
-        location.c.replace('`', '\`'),
-        '* State: *',
+        '*',
+        location.c.replace('`', '\\`'),
+        ', ',
         location.s,
-        '* Location: `',
-        location.l.replace('`', '\`'),
-        '`'
+        '* `Location: `',
+        location.l.replace('`', '\\`'),
       ].join('')
     }).join('\n'))
   })
