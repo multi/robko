@@ -106,7 +106,7 @@ module.exports = function (robot) {
           return {
             author_name: item.title[0],
             title: text,
-            text: '_last update @ 'item.pubDate[0] + '_',
+            text: '_last update @ ' + item.pubDate[0] + '_',
             author_icon: imgUrl,
             fallback: item.title[0] + ' :: ' + text,
           }
