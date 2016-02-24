@@ -80,7 +80,7 @@ module.exports = function (robot) {
       '\' -H \'Content-Type: application/json\' -d @path/to/cell.json ',
       process.env.HUBOT_ENDPOINT + webhookEndpoint + '`\n',
       '*NOTE: before uploading, set in `cell.json#remote` path to ssh key, eg.*\n',
-      '> `ssh -i keys/id_rsa -o VisualHostKey=yes -o PreferredAuthentications=publickey -o KbdInteractiveAuthentication=no -o PasswordAuthentication=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes user@host`*'
+      '>`ssh -i keys/id_rsa -o VisualHostKey=yes -o PreferredAuthentications=publickey -o KbdInteractiveAuthentication=no -o PasswordAuthentication=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentitiesOnly=yes user@host`'
     ].join(''))
   })
 
