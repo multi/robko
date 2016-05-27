@@ -1,7 +1,7 @@
 {
   "name": "robko",
   "description": "Camplight chat bot built on the Hubot framework",
-  "version": "0.0.35",
+  "version": "0.0.36",
   "author": "multi",
   "repository": {
     "type": "git",
