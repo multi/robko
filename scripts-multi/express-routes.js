@@ -14,6 +14,7 @@
 //   multi
 
 var Table = require('cli-table')
+var stripColors = require('colors/safe').stripColors
 
 module.exports = function (robot) {
 
@@ -54,7 +55,7 @@ module.exports = function (robot) {
         table.push(o)
       })
 
-      msg.send('```' + table.toString() + '```')
+      msg.send('```' + stripColors(table.toString()) + '```')
     }
   })
 
