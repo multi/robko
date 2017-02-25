@@ -21,7 +21,6 @@
     "github-webhook-middleware": "0.0.2",
     "htmlparser": "^1.7.7",
     "hubot": "^2.19.0",
-    "hubot-9gag": "^0.2.0",
     "hubot-auth": "^2.0.0",
     "hubot-available": "^1.1.0",
     "hubot-diagnostics": "0.0.1",
