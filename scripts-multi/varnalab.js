@@ -20,9 +20,9 @@ var htmlparser = require('htmlparser')
 module.exports = function (robot) {
 
   robot.respond(/who is in varnalab/i, function (msg) {
-    msg.http('http://varnalab.org').get()(function (err, res, body) {
+    msg.http('https://varnalab.org').get()(function (err, res, body) {
       if (err) {
-        msg.send('http error: ' + err)
+        msg.send('network error: ' + err)
         return
       }
 
@@ -50,7 +50,6 @@ module.exports = function (robot) {
         return
       }
 
-      // msg.send(whoIsHere[0].children[0].raw)
       msg.send(whoIsHere.filter(function (obj) {
         return obj.type === 'text'
       }).map(function (obj) {
