@@ -13,6 +13,7 @@
 // Author:
 //   multi
 
+var os = require('os')
 var package = require('../package')
 
 module.exports = function (robot) {
@@ -26,7 +27,19 @@ module.exports = function (robot) {
         robot.version,
         ')_ *[',
         package.repository.url,
-        ']*'
+        ']*',
+        '\n',
+        '> _running on_ *',
+        process.title,
+        ' ',
+        process.version,
+        '* [_',
+        os.type(),
+        ' ',
+        os.release(),
+        ' ',
+        os.arch(),
+        '_]'
       ].join('')
     )
   })
