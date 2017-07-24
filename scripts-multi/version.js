@@ -21,15 +21,11 @@ module.exports = function (robot) {
   robot.respond(/version$/i, function (msg) {
     msg.send(
       [
-        '> _running version_ *',
+        '>My version is *',
         package.version,
-        '* _(powered by Hubot ',
+        '* and I\'m powered by *Hubot ',
         robot.version,
-        ')_ *[',
-        package.repository.url,
-        ']*',
-        '\n',
-        '> _running on_ *',
+        ' @ ',
         process.title,
         ' ',
         process.version,
@@ -39,7 +35,11 @@ module.exports = function (robot) {
         os.release(),
         ' ',
         os.arch(),
-        '_]'
+        '_]',
+        '\n',
+        '_You can find my source code *<',
+        package.repository.url,
+        '|here>*_',
       ].join('')
     )
   })
