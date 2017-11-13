@@ -21,6 +21,7 @@
 var remove = require('lodash/remove')
 var async = require('async')
 var Table = require('cli-table')
+var stripColors = require('colors/safe').stripColors
 
 // robot.brain.data._acl: [{cmd, re, roles}]
 
@@ -137,6 +138,6 @@ module.exports = function (robot) {
       table.push([rule.cmd, rule.roles.join(', ')])
     })
 
-    msg.send('> Access Restrictions:\n```' + table.toString() + '```')
+    msg.send('> Access Restrictions:\n```' + stripColors(table.toString()) + '```')
   })
 }
