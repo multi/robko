@@ -108,8 +108,6 @@ module.exports = function (robot) {
     }
     robot.brain.data._serviceMonitor.urls[url] = msg.message.room
     msg.send('OK! Added!')
-    msg.send('```' + JSON.stringify(robot.brain.data._serviceMonitor, null, 2) + '```')
-    msg.send('```' + JSON.stringify(msg.message, null, 2) + '```')
     resetTimer()
   })
 
@@ -122,7 +120,6 @@ module.exports = function (robot) {
     delete robot.brain.data._serviceMonitor.urls[url]
     delete robot.brain.data._serviceMonitor.last[url]
     msg.send('OK! Removed!')
-    msg.send('```' + JSON.stringify(robot.brain.data._serviceMonitor, null, 2) + '```')
     resetTimer()
   })
 
