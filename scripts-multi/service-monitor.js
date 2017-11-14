@@ -8,7 +8,7 @@
 //   None
 //
 // Commands:
-//   hubot service-monitor add {url}  - adds url for monitoring
+//   hubot service-monitor add {url}  - adds url for monitoring (uses current room for later alerts)
 //   hubot service-monitor remove {url}  - remove url from monitoring
 //   hubot service-monitor status {url}?  - show status all services or by specific url
 //
@@ -67,7 +67,7 @@ module.exports = function (robot) {
         if (robot.brain.data._serviceMonitor.last[url] && robot.brain.data._serviceMonitor.last[url].error) {
           robot.messageRoom(
             robot.brain.data._serviceMonitor.urls[url],
-            '[service-monitor] ' + url + ' is **UP**!'
+            '[service-monitor] :rocket: ```' + url + '``` is *UP*!'
           )
         }
         robot.brain.data._serviceMonitor.last[url] = {
@@ -80,7 +80,7 @@ module.exports = function (robot) {
         if (!robot.brain.data._serviceMonitor.last[url] || !robot.brain.data._serviceMonitor.last[url].error) {
           robot.messageRoom(
             robot.brain.data._serviceMonitor.urls[url],
-            '[service-monitor] ' + url + ' is **DOWN**!'
+            '[service-monitor] :rotating_light: ```' + url + '``` is *DOWN*!'
           )
         }
         robot.brain.data._serviceMonitor.last[url] = {
@@ -143,9 +143,10 @@ module.exports = function (robot) {
 
       var message = [
         '[service-monitor]',
-        url,
+        robot.brain.data._serviceMonitor.last[url].error ? ':rotating_light:' : ':rocket:',
+        '```' + url + '```',
         'is',
-        robot.brain.data._serviceMonitor.last[url].error ? '**DOWN**!' : '**UP**!',
+        robot.brain.data._serviceMonitor.last[url].error ? '*DOWN*!' : '*UP*!',
       ]
 
       if (!robot.brain.data._serviceMonitor.last[url].error) {
