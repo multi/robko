@@ -10,7 +10,7 @@
 // Commands:
 //   hubot service-monitor add {url}  - adds url for monitoring
 //   hubot service-monitor remove {url}  - remove url from monitoring
-//   hubot service-monitor status {url}?  - remove url from monitoring
+//   hubot service-monitor status {url}?  - show status all services or by specific url
 //
 // Author:
 //   multi
@@ -99,6 +99,8 @@ module.exports = function (robot) {
     clearTimeout(timerHandle)
     runProbes()
   }
+
+  robot.brain.on('loaded', resetTimer)
 
   robot.respond(/service-monitor add (.*)$/i, function (msg) {
     var url = msg.match[1].trim().toLowerCase()
