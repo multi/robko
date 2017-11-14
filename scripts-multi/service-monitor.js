@@ -26,12 +26,12 @@ var ping = function (urlToProbe) {
   return new Promise(function (resolve, reject) {
     var url = new URL(urlToProbe)
     var result
-    var options = {
-      hostname: url.hostname,
-      port: url.port || 80,
-      path: url.pathname || '/',
+    var options = Object.assign(url, {
       timeout: 1000,
-    }
+      headers: {
+        'User-Agent': 'Hubot service-monitor probe',
+      },
+    })
     var start = Date.now()
     var pingRequest = http.request(options, function () {
       result = Date.now() - start
