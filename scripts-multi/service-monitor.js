@@ -51,18 +51,21 @@ var ping = function (urlToProbe) {
 module.exports = function (robot) {
   if (!robot.brain.data._serviceMonitor) {
     robot.brain.data._serviceMonitor = {
-      urls: [],
+      urls: {},
       last: {},
     }
   }
 
   var timerHandle = null
 
-  var runProbes = function (msg) {
-    async.each(robot.brain.data._serviceMonitor.urls, function (url, nextUrl) {
+  var runProbes = function () {
+    async.each(Object.keys(robot.brain.data._serviceMonitor.urls), function (url, nextUrl) {
       ping(url).then(function (time) {
         if (robot.brain.data._serviceMonitor.last[url] && robot.brain.data._serviceMonitor.last[url].error) {
-          msg.send('[service-monitor] ' + url + ' is **UP**!')
+          robot.messageRoom(
+            robot.brain.data._serviceMonitor.urls[url],
+            '[service-monitor] ' + url + ' is **UP**!'
+          )
         }
         robot.brain.data._serviceMonitor.last[url] = {
           time: time,
@@ -72,7 +75,10 @@ module.exports = function (robot) {
       })
       .catch(function (err) {
         if (!robot.brain.data._serviceMonitor.last[url] || !robot.brain.data._serviceMonitor.last[url].error) {
-          msg.send('[service-monitor] ' + url + ' is **DOWN**!')
+          robot.messageRoom(
+            robot.brain.data._serviceMonitor.urls[url],
+            '[service-monitor] ' + url + ' is **DOWN**!'
+          )
         }
         robot.brain.data._serviceMonitor.last[url] = {
           error: err.message,
@@ -81,48 +87,49 @@ module.exports = function (robot) {
         nextUrl()
       })
     }, function () {
-      runTimer(msg)
+      runTimer()
     })
   }
 
-  var runTimer = function (msg) {
-    timerHandle = setTimeout(function () {
-      runProbes(msg)
-    }, 60 * 1000)
+  var runTimer = function () {
+    timerHandle = setTimeout(runProbes, 60 * 1000)
   }
 
-  var resetTimer = function (msg) {
+  var resetTimer = function () {
     clearTimeout(timerHandle)
-    runProbes(msg)
+    runProbes()
   }
 
   robot.respond(/service-monitor add (.*)$/i, function (msg) {
     var url = msg.match[1].trim().toLowerCase()
-    if (robot.brain.data._serviceMonitor.urls.indexOf(url) > -1) {
+    if (robot.brain.data._serviceMonitor.urls[url]) {
       msg.send('Sorry, the url is already added.')
       return
     }
-    robot.brain.data._serviceMonitor.urls.push(url)
+    robot.brain.data._serviceMonitor.urls[url] = msg.message.room
     msg.send('OK! Added!')
-    resetTimer(msg)
+    msg.send('```' + JSON.stringify(robot.brain.data._serviceMonitor, null, 2) + '```')
+    msg.send('```' + JSON.stringify(msg.message, null, 2) + '```')
+    resetTimer()
   })
 
   robot.respond(/service-monitor remove (.*)$/i, function (msg) {
     var url = msg.match[1].trim().toLowerCase()
-    if (robot.brain.data._serviceMonitor.urls.indexOf(url) === -1) {
+    if (!robot.brain.data._serviceMonitor.urls[url]) {
       msg.send('Sorry, I don\'t monitor this url.')
       return
     }
-    robot.brain.data._serviceMonitor.urls = _.pull(robot.brain.data._serviceMonitor.urls, url)
+    delete robot.brain.data._serviceMonitor.urls[url]
     delete robot.brain.data._serviceMonitor.last[url]
     msg.send('OK! Removed!')
-    resetTimer(msg)
+    msg.send('```' + JSON.stringify(robot.brain.data._serviceMonitor, null, 2) + '```')
+    resetTimer()
   })
 
   robot.respond(/service-monitor status (.*)$/i, function (msg) {
     var url = msg.match[1].trim().toLowerCase()
     if (url) {
-      if (robot.brain.data._serviceMonitor.urls.indexOf(url) === -1) {
+      if (!robot.brain.data._serviceMonitor.urls[url]) {
         msg.send('Sorry, I don\'t monitor this url.')
         return
       }
