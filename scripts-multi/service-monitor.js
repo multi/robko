@@ -16,7 +16,8 @@
 //   multi
 
 var http = require('http')
-var URL = require('url').URL
+var https = require('https')
+var URL = require('url')
 var async = require('async')
 var _ = require('lodash')
 var Table = require('cli-table')
@@ -24,16 +25,18 @@ var stripColors = require('colors/safe').stripColors
 
 var ping = function (urlToProbe) {
   return new Promise(function (resolve, reject) {
-    var url = new URL(urlToProbe)
+    var url = URL.parse(urlToProbe)
+    var client = (url.protocol && url.protocol.toLowerCase() === 'https:') ? https : http
     var result
-    var options = Object.assign(url, {
+    var options = Object.assign({}, url, {
+      rejectUnauthorized: false,
       timeout: 1000,
       headers: {
         'User-Agent': 'Hubot service-monitor probe',
       },
     })
     var start = Date.now()
-    var pingRequest = http.request(options, function () {
+    var pingRequest = client.request(options, function () {
       result = Date.now() - start
       resolve(result)
       pingRequest.abort()
