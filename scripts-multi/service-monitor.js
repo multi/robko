@@ -67,7 +67,7 @@ module.exports = function (robot) {
         if (robot.brain.data._serviceMonitor.last[url] && robot.brain.data._serviceMonitor.last[url].error) {
           robot.messageRoom(
             robot.brain.data._serviceMonitor.urls[url],
-            '[service-monitor] :rocket: ```' + url + '``` is *UP*!'
+            '[service-monitor] :rocket: ' + url + ' is *UP*!'
           )
         }
         robot.brain.data._serviceMonitor.last[url] = {
@@ -80,7 +80,7 @@ module.exports = function (robot) {
         if (!robot.brain.data._serviceMonitor.last[url] || !robot.brain.data._serviceMonitor.last[url].error) {
           robot.messageRoom(
             robot.brain.data._serviceMonitor.urls[url],
-            '[service-monitor] :rotating_light: ```' + url + '``` is *DOWN*!'
+            '[service-monitor] :rotating_light: ' + url + ' is *DOWN*!'
           )
         }
         robot.brain.data._serviceMonitor.last[url] = {
@@ -144,7 +144,7 @@ module.exports = function (robot) {
       var message = [
         '[service-monitor]',
         robot.brain.data._serviceMonitor.last[url].error ? ':rotating_light:' : ':rocket:',
-        '```' + url + '```',
+        url,
         'is',
         robot.brain.data._serviceMonitor.last[url].error ? '*DOWN*!' : '*UP*!',
       ]
