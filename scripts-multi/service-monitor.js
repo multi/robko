@@ -104,22 +104,21 @@ module.exports = function (robot) {
   var formatStatusMessage = function (url, last) {
     var message = [
       '>',
-      last.error ? ':rotating_light:' : ':rocket:',
       url,
       'is',
-      last.error ? '*DOWN*!' : '*UP*!',
+      last.error ? '*DOWN*' : '*UP*',
+      last.error ? ':rotating_light:' : ':rocket:',
     ]
 
     if (!last.error) {
       message.push(
-        'Response time:',
         last.time,
         'ms.'
       )
     }
 
     message.push(
-      'Last updated:',
+      'at',
       last.ts
     )
 
