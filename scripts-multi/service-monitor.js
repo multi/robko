@@ -101,7 +101,7 @@ module.exports = function (robot) {
     runProbes()
   }
 
-  var formatStatusMessage = function (last) {
+  var formatStatusMessage = function (url, last) {
     var message = [
       '>',
       last.error ? ':rotating_light:' : ':rocket:',
@@ -164,7 +164,7 @@ module.exports = function (robot) {
         return
       }
 
-      msg.send(formatStatusMessage(robot.brain.data._serviceMonitor.last[url]))
+      msg.send(formatStatusMessage(url, robot.brain.data._serviceMonitor.last[url]))
     }
   })
 
@@ -179,7 +179,7 @@ module.exports = function (robot) {
     ]
 
     Object.keys(robot.brain.data._serviceMonitor.last).forEach(function (url) {
-      response.push(robot.brain.data._serviceMonitor.last[url])
+      response.push(formatStatusMessage(url, robot.brain.data._serviceMonitor.last[url]))
     })
 
     msg.send(response.join('\n'))
