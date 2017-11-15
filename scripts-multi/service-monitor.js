@@ -101,6 +101,31 @@ module.exports = function (robot) {
     runProbes()
   }
 
+  var formatStatusMessage = function (last) {
+    var message = [
+      '>',
+      last.error ? ':rotating_light:' : ':rocket:',
+      url,
+      'is',
+      last.error ? '*DOWN*!' : '*UP*!',
+    ]
+
+    if (!last.error) {
+      message.push(
+        'Response time:',
+        last.time,
+        'ms.'
+      )
+    }
+
+    message.push(
+      'Last updated:',
+      last.ts
+    )
+
+    return message.join(' ')
+  }
+
   robot.brain.on('loaded', resetTimer)
 
   robot.respond(/service-monitor add (.*)$/i, function (msg) {
@@ -139,23 +164,7 @@ module.exports = function (robot) {
         return
       }
 
-      var message = [
-        '[service-monitor]',
-        robot.brain.data._serviceMonitor.last[url].error ? ':rotating_light:' : ':rocket:',
-        url,
-        'is',
-        robot.brain.data._serviceMonitor.last[url].error ? '*DOWN*!' : '*UP*!',
-      ]
-
-      if (!robot.brain.data._serviceMonitor.last[url].error) {
-        message.push(
-          'Response time:',
-          robot.brain.data._serviceMonitor.last[url].time,
-          'ms.'
-        )
-      }
-
-      msg.send(message.join(' '))
+      msg.send(formatStatusMessage(robot.brain.data._serviceMonitor.last[url]))
     }
   })
 
@@ -170,29 +179,7 @@ module.exports = function (robot) {
     ]
 
     Object.keys(robot.brain.data._serviceMonitor.last).forEach(function (url) {
-      var last = robot.brain.data._serviceMonitor.last[url]
-      var message = [
-        '>',
-        last.error ? ':rotating_light:' : ':rocket:',
-        url,
-        'is',
-        last.error ? '*DOWN*!' : '*UP*!',
-      ]
-
-      if (!last.error) {
-        message.push(
-          'Response time:',
-          last.time,
-          'ms.'
-        )
-      }
-
-      message.push(
-        'Last updated:',
-        last.ts
-      )
-
-      response.push(message.join(' '))
+      response.push(robot.brain.data._serviceMonitor.last[url])
     })
 
     msg.send(response.join('\n'))
