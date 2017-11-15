@@ -187,6 +187,11 @@ module.exports = function (robot) {
         )
       }
 
+      message.push(
+        'Last updated:',
+        last.ts
+      )
+
       response.push(message.join(' '))
     })
 
