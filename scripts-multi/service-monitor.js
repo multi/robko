@@ -20,8 +20,6 @@ var https = require('https')
 var URL = require('url')
 var async = require('async')
 var _ = require('lodash')
-var Table = require('cli-table')
-var stripColors = require('colors/safe').stripColors
 
 var ping = function (urlToProbe) {
   return new Promise(function (resolve, reject) {
@@ -167,28 +165,31 @@ module.exports = function (robot) {
       return
     }
 
-    var table = new Table({
-      head: [
-        'URL',
-        'Last updated',
-        'Error/Response time',
-      ],
-      colWidths: [
-        40,
-        42,
-        22
-      ]
-    })
+    var response = [
+      '> Services status:',
+    ]
 
     Object.keys(robot.brain.data._serviceMonitor.last).forEach(function (url) {
       var last = robot.brain.data._serviceMonitor.last[url]
-      table.push([
+      var message = [
+        '-',
+        last.error ? ':rotating_light:' : ':rocket:',
         url,
-        last ? last.ts : '-',
-        last ? (last.error ? last.error : last.time + ' ms.') : '-',
-      ])
+        'is',
+        last.error ? '*DOWN*!' : '*UP*!',
+      ]
+
+      if (!last.error) {
+        message.push(
+          'Response time:',
+          last.time,
+          'ms.'
+        )
+      }
+
+      response.push(message.join(' '))
     })
 
-    msg.send('> Services status:\n```' + stripColors(table.toString()) + '```')
+    msg.send(response.join('\n'))
   })
 }
