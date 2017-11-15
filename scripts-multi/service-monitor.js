@@ -172,7 +172,7 @@ module.exports = function (robot) {
     Object.keys(robot.brain.data._serviceMonitor.last).forEach(function (url) {
       var last = robot.brain.data._serviceMonitor.last[url]
       var message = [
-        '-',
+        '>',
         last.error ? ':rotating_light:' : ':rocket:',
         url,
         'is',
