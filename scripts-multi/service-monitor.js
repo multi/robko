@@ -182,6 +182,8 @@ module.exports = function (robot) {
       return
     }
 
+    msg.finish()
+
     msg.send('> Services status')
 
     Object.keys(robot.brain.data._serviceMonitor.last).forEach(function (url) {
