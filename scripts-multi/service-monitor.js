@@ -183,11 +183,9 @@ module.exports = function (robot) {
     }
 
     msg.finish()
-
-    msg.send('> Services status')
-
     Object.keys(robot.brain.data._serviceMonitor.last).forEach(function (url) {
       msg.send(formatStatusMessage(url, robot.brain.data._serviceMonitor.last[url]))
     })
+    msg.send('That\'s all I got.')
   })
 }
