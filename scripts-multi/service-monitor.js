@@ -25,23 +25,22 @@ var ping = function (urlToProbe) {
   return new Promise(function (resolve, reject) {
     var url = URL.parse(urlToProbe)
     var client = (url.protocol && url.protocol.toLowerCase() === 'https:') ? https : http
-    var result
     var options = Object.assign({}, url, {
       rejectUnauthorized: false,
       timeout: 1000,
       headers: {
         'User-Agent': 'Hubot service-monitor probe',
       },
+      // ciphers: 'ALL',
+      // secureProtocol: 'TLSv1_method',
     })
     var start = Date.now()
     var pingRequest = client.request(options, function () {
-      result = Date.now() - start
-      resolve(result)
+      resolve(Date.now() - start)
       pingRequest.abort()
     })
-    pingRequest.on('error', function () {
-      result = -1
-      reject(result)
+    pingRequest.on('error', function (err) {
+      reject(err)
       pingRequest.abort()
     })
     pingRequest.write('')
@@ -62,28 +61,36 @@ module.exports = function (robot) {
   var runProbes = function () {
     async.each(Object.keys(robot.brain.data._serviceMonitor.urls), function (url, nextUrl) {
       ping(url).then(function (time) {
+        var alert = false
         if (robot.brain.data._serviceMonitor.last[url] && robot.brain.data._serviceMonitor.last[url].error) {
-          robot.messageRoom(
-            robot.brain.data._serviceMonitor.urls[url],
-            '[service-monitor] :rocket: ' + url + ' is *UP*!'
-          )
+          alert = true
         }
         robot.brain.data._serviceMonitor.last[url] = {
           time: time,
           ts: new Date(),
         }
+        if (alert) {
+          robot.messageRoom(
+            robot.brain.data._serviceMonitor.urls[url],
+            formatStatusMessage(url, robot.brain.data._serviceMonitor.last[url])
+          )
+        }
         nextUrl()
       })
       .catch(function (err) {
+        var alert = false
         if (!robot.brain.data._serviceMonitor.last[url] || !robot.brain.data._serviceMonitor.last[url].error) {
-          robot.messageRoom(
-            robot.brain.data._serviceMonitor.urls[url],
-            '[service-monitor] :rotating_light: ' + url + ' is *DOWN*!'
-          )
+          alert = true
         }
         robot.brain.data._serviceMonitor.last[url] = {
           error: err.message,
           ts: new Date(),
+        }
+        if (alert) {
+          robot.messageRoom(
+            robot.brain.data._serviceMonitor.urls[url],
+            formatStatusMessage(url, robot.brain.data._serviceMonitor.last[url])
+          )
         }
         nextUrl()
       })
@@ -115,6 +122,8 @@ module.exports = function (robot) {
         last.time,
         'ms.'
       )
+    } else {
+      message.push('Error:', last.error)
     }
 
     message.push(
