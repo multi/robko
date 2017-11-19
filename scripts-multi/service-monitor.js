@@ -27,12 +27,13 @@ var ping = function (urlToProbe) {
     var client = (url.protocol && url.protocol.toLowerCase() === 'https:') ? https : http
     var options = Object.assign({}, url, {
       rejectUnauthorized: false,
+      ecdhCurve: 'auto',
+      // ciphers: 'ALL',
+      // secureProtocol: 'TLSv1_method',
       timeout: 1000,
       headers: {
         'User-Agent': 'Hubot service-monitor probe',
       },
-      // ciphers: 'ALL',
-      // secureProtocol: 'TLSv1_method',
     })
     var start = Date.now()
     var pingRequest = client.request(options, function () {
