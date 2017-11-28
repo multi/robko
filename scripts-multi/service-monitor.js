@@ -36,8 +36,12 @@ var ping = function (urlToProbe) {
       },
     })
     var start = Date.now()
-    var pingRequest = client.request(options, function () {
-      resolve(Date.now() - start)
+    var pingRequest = client.request(options, function (res) {
+      if (res.statusCode !== 200) {
+        reject(new Error('Status code: ' + res.statusCode))
+      } else {
+        resolve(Date.now() - start)
+      }
       pingRequest.abort()
     })
     pingRequest.on('error', function (err) {
