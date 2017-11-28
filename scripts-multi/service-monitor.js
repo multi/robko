@@ -77,7 +77,7 @@ module.exports = function (robot) {
         if (alert) {
           robot.messageRoom(
             robot.brain.data._serviceMonitor.urls[url],
-            formatStatusMessage(url, robot.brain.data._serviceMonitor.last[url])
+            formatStatusMessage(url, robot.brain.data._serviceMonitor.last[url], true)
           )
         }
         nextUrl()
@@ -94,7 +94,7 @@ module.exports = function (robot) {
         if (alert) {
           robot.messageRoom(
             robot.brain.data._serviceMonitor.urls[url],
-            formatStatusMessage(url, robot.brain.data._serviceMonitor.last[url])
+            formatStatusMessage(url, robot.brain.data._serviceMonitor.last[url], true)
           )
         }
         nextUrl()
@@ -113,14 +113,17 @@ module.exports = function (robot) {
     runProbes()
   }
 
-  var formatStatusMessage = function (url, last) {
+  var formatStatusMessage = function (url, last, mention) {
     var message = [
-      '>',
       url,
       'is',
       last.error ? '*DOWN*' : '*UP*',
       last.error ? ':rotating_light:' : ':rocket:',
     ]
+
+    if (mention) {
+      message.unshift('<!channel>')
+    }
 
     if (!last.error) {
       message.push(
