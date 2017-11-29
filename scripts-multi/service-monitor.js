@@ -21,6 +21,10 @@ var URL = require('url')
 var async = require('async')
 var _ = require('lodash')
 
+var ignoredErrors = [
+  'ENETUNREACH', // bot network is unreachable
+]
+
 var ping = function (urlToProbe) {
   return new Promise(function (resolve, reject) {
     var url = URL.parse(urlToProbe)
@@ -31,9 +35,9 @@ var ping = function (urlToProbe) {
       // ciphers: 'ALL',
       // secureProtocol: 'TLSv1_method',
       timeout: 1000,
-      headers: {
-        'User-Agent': 'Hubot service-monitor probe',
-      },
+      // headers: {
+      //   'User-Agent': 'Hubot service-monitor probe',
+      // },
     })
     var start = Date.now()
     var pingRequest = client.request(options, function (res) {
@@ -45,7 +49,12 @@ var ping = function (urlToProbe) {
       pingRequest.abort()
     })
     pingRequest.on('error', function (err) {
-      reject(err)
+      if (_.includes(ignoredErrors, err.code)) {
+        console.error(err)
+        resolve()
+      } else {
+        reject(err)
+      }
       pingRequest.abort()
     })
     pingRequest.write('')
@@ -66,6 +75,10 @@ module.exports = function (robot) {
   var runProbes = function () {
     async.each(Object.keys(robot.brain.data._serviceMonitor.urls), function (url, nextUrl) {
       ping(url).then(function (time) {
+        if (!time) {
+          return nextUrl()
+        }
+
         var alert = false
         if (robot.brain.data._serviceMonitor.last[url] && robot.brain.data._serviceMonitor.last[url].error) {
           alert = true
