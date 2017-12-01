@@ -43,6 +43,7 @@
     "lodash": "4.17.4",
     "moment": "2.19.2",
     "morgan": "1.9.0",
+    "net-ping": "1.2.1",
     "organic-angel": "0.3.2",
     "soupselect": "0.2.0",
     "toobusy-js": "0.5.1",
