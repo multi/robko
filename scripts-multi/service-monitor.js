@@ -5,7 +5,7 @@
 //   None
 //
 // Configuration:
-//   MY_PUBLIC_IP - required
+//   None
 //
 // Commands:
 //   hubot service-monitor add {url}  - adds url for monitoring (uses current room for later alerts)
@@ -20,11 +20,6 @@ var https = require('https')
 var URL = require('url')
 var async = require('async')
 var _ = require('lodash')
-var netPing = require('net-ping')
-var pingSession = netPing.createSession({
-  packetSize: 12,
-  timeout: 1000,
-})
 
 var ignoredErrors = [
   'ENETUNREACH', // bot network is unreachable
@@ -78,59 +73,47 @@ module.exports = function (robot) {
   var timerHandle = null
 
   var runProbes = function () {
-    var urls = Object.keys(robot.brain.data._serviceMonitor.urls)
-    if (!urls.length) {
-      return
-    }
+    async.each(Object.keys(robot.brain.data._serviceMonitor.urls), function (url, nextUrl) {
+      ping(url).then(function (time) {
+        if (!time) {
+          return nextUrl()
+        }
 
-    pingSession.pingHost(process.env.MY_PUBLIC_IP, function (err) {
-      if (err) {
-        console.error(err)
-        return
-      }
-
-      async.each(urls, function (url, nextUrl) {
-        ping(url).then(function (time) {
-          if (!time) {
-            return nextUrl()
-          }
-
-          var alert = false
-          if (robot.brain.data._serviceMonitor.last[url] && robot.brain.data._serviceMonitor.last[url].error) {
-            alert = true
-          }
-          robot.brain.data._serviceMonitor.last[url] = {
-            time: time,
-            ts: new Date(),
-          }
-          if (alert) {
-            robot.messageRoom(
-              robot.brain.data._serviceMonitor.urls[url],
-              formatStatusMessage(url, robot.brain.data._serviceMonitor.last[url], true)
-            )
-          }
-          nextUrl()
-        })
-        .catch(function (err) {
-          var alert = false
-          if (!robot.brain.data._serviceMonitor.last[url] || !robot.brain.data._serviceMonitor.last[url].error) {
-            alert = true
-          }
-          robot.brain.data._serviceMonitor.last[url] = {
-            error: err.message,
-            ts: new Date(),
-          }
-          if (alert) {
-            robot.messageRoom(
-              robot.brain.data._serviceMonitor.urls[url],
-              formatStatusMessage(url, robot.brain.data._serviceMonitor.last[url], true)
-            )
-          }
-          nextUrl()
-        })
-      }, function () {
-        runTimer()
+        var alert = false
+        if (robot.brain.data._serviceMonitor.last[url] && robot.brain.data._serviceMonitor.last[url].error) {
+          alert = true
+        }
+        robot.brain.data._serviceMonitor.last[url] = {
+          time: time,
+          ts: new Date(),
+        }
+        if (alert) {
+          robot.messageRoom(
+            robot.brain.data._serviceMonitor.urls[url],
+            formatStatusMessage(url, robot.brain.data._serviceMonitor.last[url], true)
+          )
+        }
+        nextUrl()
       })
+      .catch(function (err) {
+        var alert = false
+        if (!robot.brain.data._serviceMonitor.last[url] || !robot.brain.data._serviceMonitor.last[url].error) {
+          alert = true
+        }
+        robot.brain.data._serviceMonitor.last[url] = {
+          error: err.message,
+          ts: new Date(),
+        }
+        if (alert) {
+          robot.messageRoom(
+            robot.brain.data._serviceMonitor.urls[url],
+            formatStatusMessage(url, robot.brain.data._serviceMonitor.last[url], true)
+          )
+        }
+        nextUrl()
+      })
+    }, function () {
+      runTimer()
     })
   }
 
@@ -173,12 +156,6 @@ module.exports = function (robot) {
   }
 
   robot.brain.on('loaded', resetTimer)
-  robot.brain.on('close', function () {
-    if (timerHandle) {
-      clearTimeout(timerHandle)
-    }
-    pingSession.close()
-  })
 
   robot.respond(/service-monitor add (.*)$/i, function (msg) {
     var url = msg.match[1].trim().toLowerCase()
