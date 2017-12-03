@@ -41,7 +41,7 @@
     "hubot-team": "2.0.0",
     "hubot-watcher": "0.1.0",
     "lodash": "4.17.4",
-    "moment": "2.19.2",
+    "moment": "2.19.3",
     "morgan": "1.9.0",
     "organic-angel": "0.3.2",
     "soupselect": "0.2.0",
