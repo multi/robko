@@ -5,7 +5,7 @@
 //   None
 //
 // Configuration:
-//   None
+//   MY_PUBLIC_IP - required
 //
 // Commands:
 //   hubot service-monitor add {url}  - adds url for monitoring (uses current room for later alerts)
@@ -19,11 +19,7 @@ var http = require('http')
 var https = require('https')
 var URL = require('url')
 var async = require('async')
-var _ = require('lodash')
-
-var ignoredErrors = [
-  'ENETUNREACH', // bot network is unreachable
-]
+var dns = require('dns')
 
 var ping = function (urlToProbe) {
   return new Promise(function (resolve, reject) {
@@ -49,12 +45,7 @@ var ping = function (urlToProbe) {
       pingRequest.abort()
     })
     pingRequest.on('error', function (err) {
-      if (_.includes(ignoredErrors, err.code)) {
-        console.error(err)
-        resolve()
-      } else {
-        reject(err)
-      }
+      reject(err)
       pingRequest.abort()
     })
     pingRequest.write('')
@@ -96,21 +87,32 @@ module.exports = function (robot) {
         nextUrl()
       })
       .catch(function (err) {
-        var alert = false
-        if (!robot.brain.data._serviceMonitor.last[url] || !robot.brain.data._serviceMonitor.last[url].error) {
-          alert = true
-        }
-        robot.brain.data._serviceMonitor.last[url] = {
-          error: err.message,
-          ts: new Date(),
-        }
-        if (alert) {
-          robot.messageRoom(
-            robot.brain.data._serviceMonitor.urls[url],
-            formatStatusMessage(url, robot.brain.data._serviceMonitor.last[url], true)
-          )
-        }
-        nextUrl()
+        var now = new Date()
+        dns.lookupService(process.env.MY_PUBLIC_IP, 443, function (lookupError) {
+          if (lookupError) {
+            // don't log & alert possible false alarms,
+            // also stop the execution of other probes
+            console.error('lookupError', lookupError)
+            console.error('probe', url, 'error', err)
+            return nextUrl(err)
+          }
+
+          var alert = false
+          if (!robot.brain.data._serviceMonitor.last[url] || !robot.brain.data._serviceMonitor.last[url].error) {
+            alert = true
+          }
+          robot.brain.data._serviceMonitor.last[url] = {
+            error: err.message,
+            ts: now,
+          }
+          if (alert) {
+            robot.messageRoom(
+              robot.brain.data._serviceMonitor.urls[url],
+              formatStatusMessage(url, robot.brain.data._serviceMonitor.last[url], true)
+            )
+          }
+          nextUrl()
+        })
       })
     }, function () {
       runTimer()
