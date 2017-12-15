@@ -5,7 +5,7 @@
 //   None
 //
 // Configuration:
-//   MY_PUBLIC_IP - required
+//   IP_TO_RESOLVE - required, double check that bot network is OK
 //
 // Commands:
 //   hubot service-monitor add {url}  - adds url for monitoring (uses current room for later alerts)
@@ -66,10 +66,6 @@ module.exports = function (robot) {
   var runProbes = function () {
     async.each(Object.keys(robot.brain.data._serviceMonitor.urls), function (url, nextUrl) {
       ping(url).then(function (time) {
-        if (!time) {
-          return nextUrl()
-        }
-
         var alert = false
         if (robot.brain.data._serviceMonitor.last[url] && robot.brain.data._serviceMonitor.last[url].error) {
           alert = true
@@ -88,11 +84,11 @@ module.exports = function (robot) {
       })
       .catch(function (err) {
         var now = new Date()
-        dns.lookupService(process.env.MY_PUBLIC_IP, 443, function (lookupError) {
-          if (lookupError) {
+        dns.reverse(process.env.IP_TO_RESOLVE, function (reverseResolveError) {
+          if (reverseResolveError) {
             // don't log & alert possible false alarms,
             // also stop the execution of other probes
-            console.error('lookupError', lookupError)
+            console.error('reverseResolveError', reverseResolveError)
             console.error('probe', url, 'error', err)
             return nextUrl(err)
           }
