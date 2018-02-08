@@ -28,7 +28,7 @@
     "hubot-google-translate": "0.2.1",
     "hubot-hackernews": "1.0.0",
     "hubot-help": "hubotio/hubot-help#master",
-    "hubot-irc": "0.2.9",
+    "hubot-irc": "0.4.0",
     "hubot-maps": "0.0.3",
     "hubot-plusplus": "1.4.0",
     "hubot-pomodoro": "1.1.5",
@@ -40,13 +40,13 @@
     "hubot-slack": "4.4.0",
     "hubot-team": "2.0.0",
     "hubot-watcher": "0.1.0",
-    "lodash": "4.17.4",
-    "moment": "2.19.3",
+    "lodash": "4.17.5",
+    "moment": "2.20.1",
     "morgan": "1.9.0",
     "organic-angel": "0.3.2",
     "soupselect": "0.2.0",
     "toobusy-js": "0.5.1",
-    "uuid": "3.1.0",
+    "uuid": "3.2.1",
     "xml2js": "0.4.19"
   }
 }
