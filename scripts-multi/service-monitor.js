@@ -21,6 +21,8 @@ var URL = require('url')
 var async = require('async')
 var dns = require('dns')
 
+var MIN_ERROR_COUNT = 1
+
 var ping = function (urlToProbe) {
   return new Promise(function (resolve, reject) {
     var url = URL.parse(urlToProbe)
@@ -97,9 +99,20 @@ module.exports = function (robot) {
           if (!robot.brain.data._serviceMonitor.last[url] || !robot.brain.data._serviceMonitor.last[url].error) {
             alert = true
           }
+          if (!robot.brain.data._serviceMonitor.last[url]) {
+            robot.brain.data._serviceMonitor.last[url] = {}
+          }
+          if ((robot.brain.data._serviceMonitor.last[url].errorCount || 0) < MIN_ERROR_COUNT) {
+            robot.brain.data._serviceMonitor.last[url] = {
+              errorCount: (robot.brain.data._serviceMonitor.last[url].errorCount || 0) + 1,
+            }
+            console.error('probe', url, 'error', err, 'retrying count', robot.brain.data._serviceMonitor.last[url].errorCount)
+            return nextUrl()
+          }
           robot.brain.data._serviceMonitor.last[url] = {
             error: err.message,
             ts: now,
+            errorCount: robot.brain.data._serviceMonitor.last[url].errorCount || 0,
           }
           if (alert) {
             robot.messageRoom(
