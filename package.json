@@ -37,7 +37,7 @@
     "hubot-rules": "1.0.0",
     "hubot-scripts": "2.17.2",
     "hubot-shipit": "0.2.1",
-    "hubot-slack": "4.4.0",
+    "hubot-slack": "4.5.2",
     "hubot-team": "2.0.0",
     "hubot-watcher": "0.1.0",
     "lodash": "4.17.10",
@@ -46,7 +46,7 @@
     "organic-angel": "0.3.2",
     "soupselect": "0.2.0",
     "toobusy-js": "0.5.1",
-    "uuid": "3.2.1",
+    "uuid": "3.3.2",
     "xml2js": "0.4.19"
   }
 }
