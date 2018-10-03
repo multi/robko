@@ -22,6 +22,7 @@ var async = require('async')
 var dns = require('dns')
 
 var MIN_ERROR_COUNT = 1
+var PROBES_TIMER_TIMEOUT = 60 * 1000 // 1 minute
 
 var ping = function (urlToProbe) {
   return new Promise(function (resolve, reject) {
@@ -39,7 +40,7 @@ var ping = function (urlToProbe) {
     })
     var start = Date.now()
     var pingRequest = client.request(options, function (res) {
-      if (res.statusCode !== 200) {
+      if (res.statusCode >= 400) {
         reject(new Error(res.statusCode))
       } else {
         resolve(Date.now() - start)
@@ -129,7 +130,7 @@ module.exports = function (robot) {
   }
 
   var runTimer = function () {
-    timerHandle = setTimeout(runProbes, 60 * 1000)
+    timerHandle = setTimeout(runProbes, PROBES_TIMER_TIMEOUT)
   }
 
   var resetTimer = function () {
