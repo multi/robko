@@ -45,7 +45,7 @@ module.exports = function (robot) {
     })
     .catch(function (err) {
       console.error(err)
-      msg.send(err)
+      msg.send(`error: ${err}`)
     })
   })
 
