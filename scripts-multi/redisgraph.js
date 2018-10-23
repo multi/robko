@@ -13,7 +13,7 @@
 // Author:
 //   multi
 
-var RedisGraph = require('redisgraph.js')
+var RedisGraph = require('redisgraph.js/src/redisGraph')
 var GRAPH_NAME = 'hubot_graph'
 
 module.exports = function (robot) {
