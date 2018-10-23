@@ -40,12 +40,13 @@ module.exports = function (robot) {
     	}
       if (message.length) {
         msg.send(message.join('\n'))
+      } else {
+        msg.send('Empty result.')
       }
-      msg.send(res.getStatistics().queryExecutionTime())
+      msg.send(JSON.stringify(res.getStatistics(), null, 2))
     })
     .catch(function (err) {
-      console.error(err)
-      msg.send(`error: ${err}`)
+      msg.send(`${err}`)
     })
   })
 
