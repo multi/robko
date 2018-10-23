@@ -26,6 +26,8 @@ module.exports = function (robot) {
       return
     }
 
+    msg.send(`executing query ${msg.match[1]}`)
+
     graph
     .query(msg.match[1])
     .then(function (res) {
