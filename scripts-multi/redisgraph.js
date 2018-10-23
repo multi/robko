@@ -26,8 +26,6 @@ module.exports = function (robot) {
       return
     }
 
-    msg.send(`executing query ${msg.match[1]}`)
-
     graph
     .query(msg.match[1])
     .then(function (res) {
@@ -43,7 +41,7 @@ module.exports = function (robot) {
       } else {
         msg.send('Empty result.')
       }
-      msg.send(JSON.stringify(res.getStatistics(), null, 2))
+      msg.send(JSON.stringify(res.getStatistics().getStatistics(), null, 2))
     })
     .catch(function (err) {
       msg.send(`${err}`)
