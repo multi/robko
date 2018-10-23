@@ -44,6 +44,7 @@
     "moment": "2.22.2",
     "morgan": "1.9.1",
     "organic-angel": "0.3.2",
+    "redisgraph.js": "1.0.0",
     "soupselect": "0.2.0",
     "toobusy-js": "0.5.1",
     "uuid": "3.3.2",
