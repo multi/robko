@@ -17,7 +17,7 @@
     "cleverbot-node": "0.3.11",
     "cli-table": "0.3.1",
     "coffee-script": "1.12.7",
-    "express": "4.16.3",
+    "express": "4.16.4",
     "github-webhook-middleware": "0.0.2",
     "htmlparser": "1.7.7",
     "hubot": "hubotio/hubot#master",
