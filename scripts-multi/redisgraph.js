@@ -41,7 +41,14 @@ module.exports = function (robot) {
       } else {
         msg.send('Empty result.')
       }
-      msg.send(JSON.stringify(res.getStatistics().getStatistics(), null, 2))
+      var stats = res.getStatistics().getStatistics()
+      var statsMsg = []
+      Object.keys(stats).forEach(function (key) {
+        statsMsg.push(`${key}: ${stats[key]}`)
+      })
+      if (statsMsg.length) {
+        msg.send(statsMsg.join('\n'))
+      }
     })
     .catch(function (err) {
       msg.send(`${err}`)
