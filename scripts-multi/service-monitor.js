@@ -86,6 +86,11 @@ module.exports = function (robot) {
         nextUrl()
       })
       .catch(function (err) {
+        if (err.code === 'EAI_AGAIN') {
+          // dns resolve timeout, false positive
+          console.error('dns resolve timeout', url, err)
+          return nextUrl()
+        }
         var now = new Date()
         dns.reverse(process.env.IP_TO_RESOLVE, function (reverseResolveError) {
           if (reverseResolveError) {
