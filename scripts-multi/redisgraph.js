@@ -32,12 +32,14 @@ module.exports = function (robot) {
       var message = []
       while (res.hasNext()) {
         var record = res.next()
+        var recordMsg = {}
         record.keys().forEach(function (key) {
-          message.push(`${key}: ${record.getString(key)}`)
+          recordMsg[key] = record.getString(key)
         })
+        message.push(recordMsg)
     	}
       if (message.length) {
-        msg.send(message.join('\n'))
+        msg.send('```' + JSON.stringify(message, null, 2) + '```')
       } else {
         msg.send('Empty result.')
       }
