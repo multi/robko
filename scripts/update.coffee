@@ -45,7 +45,7 @@ module.exports = (robot) ->
           msg.send "git pull failed: " + stderr
         else
           output = stdout + ''
-          if not /Already up\-to\-date/.test output
+          if not /Already up to date/.test output
             if output.length <= (robot.adapter.MAX_MESSAGE_LENGTH || 4000) - 6
               msg.send "```#{output}```"
             else
