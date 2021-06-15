@@ -60,7 +60,7 @@ module.exports = (robot) ->
     try
       prod = if !msg.match[1] then '--production' else ''
       msg.send "npm install #{prod}..."
-      child_process.exec "npm i #{prod} --no-optional", (error, stdout, stderr) ->
+      child_process.exec "npm i #{prod} --no-optional --legacy-peer-deps", (error, stdout, stderr) ->
         if error
           msg.send "npm install #{prod} failed: " + stderr
         else
