@@ -30,6 +30,7 @@
     "hubot-help": "hubotio/hubot-help#master",
     "hubot-irc": "0.4.2",
     "hubot-maps": "0.0.3",
+    "hubot-notify": "0.1.0",
     "hubot-plusplus": "1.4.0",
     "hubot-pomodoro": "2.0.3",
     "hubot-pugme": "0.1.1",
