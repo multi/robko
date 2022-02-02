@@ -8,6 +8,5 @@
   "hubot-diagnostics",
   "hubot-google-images",
   "hubot-google-translate",
-  "hubot-maps",
-  "hubot-notify"
+  "hubot-maps"
 ]
