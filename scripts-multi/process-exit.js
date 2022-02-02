@@ -16,8 +16,10 @@
 var exec = require('child_process').exec
 
 var exit = function (robot) {
+  setTimeout(function () {
+    process.exit()
+  }, 5000)
   robot.shutdown()
-  process.exit()
 }
 
 module.exports = function (robot) {
