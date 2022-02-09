@@ -20,7 +20,7 @@ var htmlparser = require('htmlparser')
 module.exports = function (robot) {
 
   robot.respond(/who is in varnalab/i, function (msg) {
-    msg.http('https://varnalab.org').get()(function (err, res, body) {
+    msg.http('https://www.varnalab.org/bg/about').get()(function (err, res, body) {
       if (err) {
         msg.send('network error: ' + err)
         return
@@ -31,24 +31,16 @@ module.exports = function (robot) {
 
       parser.parseComplete(body)
 
-      var whoIsHere = select(handler.dom, '.teaser-who-is-here .teaser-text-with-icon')
+      var whoIsHere = select(handler.dom, '.widget_whois_wrapper .widget_whois_container ul li')
 
-      if (!whoIsHere || whoIsHere.length !== 1) {
+      if (!whoIsHere || whoIsHere.length < 1) {
         msg.send('something goes wrong')
         return
       }
 
-      whoIsHere = whoIsHere[0].children
-
-      if (whoIsHere.length < 1) {
-        msg.send('something goes wrong')
-        return
-      }
-
-      if (!whoIsHere[0].children || whoIsHere[0].children.length === 0) {
-        msg.send('something goes wrong')
-        return
-      }
+      whoIsHere = whoIsHere.map(function (obj) {
+        return obj.children[0]
+      })
 
       msg.send(whoIsHere.filter(function (obj) {
         return obj.type === 'text'
