@@ -58,9 +58,9 @@ module.exports = (robot) ->
 
   robot.respond /npm install( dev)?$/i, (msg) ->
     try
-      prod = if !msg.match[1] then '--production' else ''
+      prod = if !msg.match[1] then '--omit=dev' else ''
       msg.send "npm install #{prod}..."
-      child_process.exec "npm i #{prod} --no-optional --legacy-peer-deps", (error, stdout, stderr) ->
+      child_process.exec "npm i #{prod} --omit=optional --legacy-peer-deps", (error, stdout, stderr) ->
         if error
           msg.send "npm install #{prod} failed: " + stderr
         else
