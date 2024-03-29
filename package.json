@@ -16,7 +16,7 @@
     "chrono-node": "2.7.5",
     "cleverbot-node": "0.3.11",
     "cli-table": "0.3.11",
-    "coffeescript": "2.7.0",
+    "coffee-script": "1.12.7",
     "express": "4.19.2",
     "github-webhook-middleware": "0.0.2",
     "htmlparser": "1.7.7",
