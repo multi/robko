@@ -10,14 +10,14 @@
   "license": "ISC",
   "dependencies": {
     "angelscripts-cellcmds": "0.2.3",
-    "async": "3.2.5",
+    "async": "3.2.6",
     "basic-auth": "2.0.1",
-    "body-parser": "1.20.2",
-    "chrono-node": "2.7.5",
+    "body-parser": "1.20.3",
+    "chrono-node": "2.7.7",
     "cleverbot-node": "0.3.11",
     "cli-table": "0.3.11",
     "coffee-script": "1.12.7",
-    "express": "4.19.2",
+    "express": "4.21.1",
     "github-webhook-middleware": "0.0.2",
     "htmlparser": "1.7.7",
     "hubot": "hubotio/hubot#main",
@@ -33,7 +33,7 @@
     "hubot-plusplus": "1.4.0",
     "hubot-pomodoro": "2.0.3",
     "hubot-pugme": "0.1.1",
-    "hubot-redis-brain": "2.1.0",
+    "hubot-redis-brain": "3.0.1",
     "hubot-rules": "2.1.1",
     "hubot-scripts": "2.17.2",
     "hubot-shipit": "0.2.1",
@@ -48,7 +48,7 @@
     "soupselect": "0.2.0",
     "toobusy-js": "0.5.1",
     "underscore.string": "3.3.6",
-    "uuid": "9.0.1",
+    "uuid": "10.0.0",
     "xml2js": "0.6.2"
   }
 }
