@@ -40,7 +40,7 @@
     "hubot-slack": "4.10.0",
     "hubot-team": "2.0.0",
     "hubot-watcher": "0.1.0",
-    "lodash": "4.17.23",
+    "lodash": "4.18.1",
     "moment": "2.30.1",
     "morgan": "1.10.1",
     "organic-angel": "0.4.0",
@@ -48,7 +48,7 @@
     "soupselect": "0.2.0",
     "toobusy-js": "0.5.1",
     "underscore.string": "3.3.6",
-    "uuid": "13.0.0",
+    "uuid": "14.0.0",
     "xml2js": "0.6.2"
   }
 }
